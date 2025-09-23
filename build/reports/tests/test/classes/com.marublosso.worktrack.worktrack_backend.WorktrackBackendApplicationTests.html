@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - WorktrackBackendApplicationTests</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>WorktrackBackendApplicationTests</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/com.marublosso.worktrack.worktrack_backend.html">com.marublosso.worktrack.worktrack_backend</a> &gt; WorktrackBackendApplicationTests</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">1</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">0</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">0.297s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox success" id="successRate">
+<div class="percent">100%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="tab-container">
+<ul class="tabLinks">
+<li>
+<a href="#">Tests</a>
+</li>
+<li>
+<a href="#">Standard output</a>
+</li>
+</ul>
+<div class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="success">contextLoads()</td>
+<td class="success">0.297s</td>
+<td class="success">passed</td>
+</tr>
+</table>
+</div>
+<div class="tab">
+<h2>Standard output</h2>
+<span class="code">
+<pre>15:26:28.234 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.marublosso.worktrack.worktrack_backend.WorktrackBackendApplicationTests]: WorktrackBackendApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+15:26:28.283 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.marublosso.worktrack.worktrack_backend.WorktrackBackendApplication for test class com.marublosso.worktrack.worktrack_backend.WorktrackBackendApplicationTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.5)
+
+2025-09-15T15:26:28.469+09:00  INFO 25923 --- [worktrack-backend] [    Test worker] c.m.w.w.WorktrackBackendApplicationTests : Starting WorktrackBackendApplicationTests using Java 17.0.8 with PID 25923 (started by kangminsung in /Users/kangminsung/Develop/worktrack-project/worktrack-backend)
+2025-09-15T15:26:28.470+09:00  INFO 25923 --- [worktrack-backend] [    Test worker] c.m.w.w.WorktrackBackendApplicationTests : No active profile set, falling back to 1 default profile: &quot;default&quot;
+2025-09-15T15:26:28.859+09:00  INFO 25923 --- [worktrack-backend] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-09-15T15:26:28.870+09:00  INFO 25923 --- [worktrack-backend] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 6 ms. Found 0 JPA repository interfaces.
+2025-09-15T15:26:28.991+09:00  INFO 25923 --- [worktrack-backend] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-09-15T15:26:29.028+09:00  INFO 25923 --- [worktrack-backend] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.mariadb.jdbc.Connection@5a85b4e6
+2025-09-15T15:26:29.029+09:00  INFO 25923 --- [worktrack-backend] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-09-15T15:26:29.074+09:00  INFO 25923 --- [worktrack-backend] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-09-15T15:26:29.094+09:00  INFO 25923 --- [worktrack-backend] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.6.26.Final
+2025-09-15T15:26:29.108+09:00  INFO 25923 --- [worktrack-backend] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2025-09-15T15:26:29.221+09:00  INFO 25923 --- [worktrack-backend] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-09-15T15:26:29.255+09:00  INFO 25923 --- [worktrack-backend] [    Test worker] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 11.7.2
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-09-15T15:26:29.383+09:00  INFO 25923 --- [worktrack-backend] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-09-15T15:26:29.385+09:00  INFO 25923 --- [worktrack-backend] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-09-15T15:26:29.447+09:00  WARN 25923 --- [worktrack-backend] [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-09-15T15:26:29.763+09:00  INFO 25923 --- [worktrack-backend] [    Test worker] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 1 endpoint beneath base path '/actuator'
+2025-09-15T15:26:29.806+09:00  INFO 25923 --- [worktrack-backend] [    Test worker] c.m.w.w.WorktrackBackendApplicationTests : Started WorktrackBackendApplicationTests in 1.456 seconds (process running for 1.99)
+2025-09-15T15:26:29.831+09:00  INFO 25923 --- [worktrack-backend] [    Test worker] o.s.b.a.b.JobLauncherApplicationRunner   : Running default command line with: []
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="https://www.gradle.org">Gradle 8.14.3</a> at 2025. 9. 15. 오후 3:26:30</p>
+</div>
+</div>
+</body>
+</html>
