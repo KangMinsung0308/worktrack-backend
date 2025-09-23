@@ -10,4 +10,4 @@ bin/
 
 # 환경파일 (민감 정보)
 src/main/resources/application.properties
-src/main/resources/application.properties
+`

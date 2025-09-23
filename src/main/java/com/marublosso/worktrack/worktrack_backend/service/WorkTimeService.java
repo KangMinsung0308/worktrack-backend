@@ -15,7 +15,7 @@ public class WorkTimeService {
 	
     private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
+
     public WorkTimeService(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
