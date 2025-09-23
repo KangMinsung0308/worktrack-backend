@@ -1,1 +1,13 @@
+# Gradle
+.gradle/
+build/
+bin/
+
+# IDE / OS 관련
+*.iml
+.idea/
+.DS_Store
+
+# 환경파일 (민감 정보)
+src/main/resources/application.properties
 src/main/resources/application.properties
