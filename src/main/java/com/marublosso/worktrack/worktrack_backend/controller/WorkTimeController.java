@@ -27,9 +27,7 @@ public class WorkTimeController {
             request.getUserId(),
             request.getWorkDate(),
             request.getStartTime(),
-            request.getEndTime(),
-            request.getTotalHours(),
-            request.getOvertime()
+            request.getEndTime()
         );
         return ResponseEntity.ok("근무시간 기록 완료"); 
     }
