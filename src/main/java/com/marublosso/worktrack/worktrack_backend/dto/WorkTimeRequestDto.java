@@ -13,6 +13,6 @@ public class WorkTimeRequestDto {
     private LocalDateTime endTime;
     private Double totalHours;
     private Double overtime;
-    private int worktype;
+    private Long worktype;
 }
 

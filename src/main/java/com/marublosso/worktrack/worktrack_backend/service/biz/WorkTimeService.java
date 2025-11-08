@@ -1,4 +1,4 @@
-package com.marublosso.worktrack.worktrack_backend.service;
+package com.marublosso.worktrack.worktrack_backend.service.biz;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,14 +10,15 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import com.marublosso.worktrack.worktrack_backend.dto.WorkTimeRequestDto;
-import com.marublosso.worktrack.worktrack_backend.service.Calculation.GeneralOverTime;
-
+import com.marublosso.worktrack.worktrack_backend.service.biz.calculation.GeneralOverTime;
+import com.marublosso.worktrack.worktrack_backend.util.timetools.DaySelector;
 
 @Service
 public class WorkTimeService {
 	
     private final JdbcTemplate jdbcTemplate;
 	private final GeneralOverTime generalOverTime = new GeneralOverTime();
+	private final DaySelector daySelector = new DaySelector();
 
 
     public WorkTimeService(JdbcTemplate jdbcTemplate) {
@@ -27,7 +28,7 @@ public class WorkTimeService {
     public void recordWorkTime(Long userId, LocalDate workDate, LocalDateTime startTime, LocalDateTime endTime) {
 
 		// 1. 잔업시간, 총근무 시간 계산 (calculateOvertime 부품 사용)
-        WorkTimeRequestDto result = generalOverTime.calculateOvertime(1, startTime, endTime);
+        WorkTimeRequestDto result = generalOverTime.calculateOvertime(userId, startTime, endTime);
         Double totalHours = result.getTotalHours();
         Double overtime = result.getOvertime();
     	
@@ -52,23 +53,30 @@ public class WorkTimeService {
 	       now
 	   );
     }
-	
+
 	// 근무시간 조회 ((Input) -> Json(Return))
     public List<WorkTimeRequestDto> getWorkTime(
         // DB 조회 로직 구현
 		Long userId,               	// 사용자 ID
 	    LocalDate workDate			// 근무 날짜
 		){
+	
+		LocalDate firstDay = daySelector.Firstday(workDate);
+		LocalDate lastDay = daySelector.Lastday(workDate);
+
 			// 1. SQL문 작성
-			String sql = 
-			"SELECT " + 
-				" * " +	 
-			"FROM" + 
-				" ATTENDANCE " +
-			"WHERE" + 
-				" user_Id = ? " +
-			"AND" +
-				" work_Date = ? "
+			String sql =  
+				" SELECT a.* " +
+				" FROM worktrack_db.ATTENDANCE a " +
+				" JOIN (" +
+				"	SELECT user_id, work_date, MAX(attendance_id) AS latest " +
+				"	FROM worktrack_db.ATTENDANCE " +
+				"	Where user_id = ? and work_date Between ? and ? " +
+				"	GROUP BY user_id, work_date " +
+				" ) b ON a.user_id = b.user_id " +
+				" AND a.work_date = b.work_date " +
+				" AND a.attendance_id = b.latest " +
+				" ORDER By work_date "
 			;
     	 
 			// 2. JDBC 템플릿을 사용하여 데이터베이스에서 조회
@@ -86,7 +94,7 @@ public class WorkTimeService {
 					dto.setOvertime(rs.getDouble("overtime"));
 					return dto;
 				}
-			},userId, workDate);
+			},userId,firstDay, lastDay);
     
         return results;
     }

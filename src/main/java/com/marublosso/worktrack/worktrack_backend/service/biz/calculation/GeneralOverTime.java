@@ -1,6 +1,5 @@
-package com.marublosso.worktrack.worktrack_backend.service.Calculation;
+package com.marublosso.worktrack.worktrack_backend.service.biz.calculation;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import com.marublosso.worktrack.worktrack_backend.dto.WorkTimeRequestDto;
 
@@ -14,7 +13,7 @@ public class GeneralOverTime implements TimeCalculator {
     private static final double STOLEN_TIME = 0.75; // jpxi 강제 휴계시간
 
     @Override
-    public WorkTimeRequestDto calculateOvertime(int worktype,LocalDateTime startTime, LocalDateTime endTime) {
+    public WorkTimeRequestDto calculateOvertime(Long worktype,LocalDateTime startTime, LocalDateTime endTime) {
         double totalHours = Duration.between(startTime, endTime).toMinutes() / 60.0;
         
         double overtime = 0.0;
