@@ -14,5 +14,6 @@ public class WorkTimeRequestDto {
     private Double totalHours;
     private Double overtime;
     private Long worktype;
+    private String bikou;
 }
 

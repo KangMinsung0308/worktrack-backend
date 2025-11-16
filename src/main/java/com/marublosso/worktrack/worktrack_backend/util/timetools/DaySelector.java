@@ -1,6 +1,9 @@
 package com.marublosso.worktrack.worktrack_backend.util.timetools;
 import java.time.LocalDate;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class DaySelector {
 
     public LocalDate Firstday (LocalDate inputDate){

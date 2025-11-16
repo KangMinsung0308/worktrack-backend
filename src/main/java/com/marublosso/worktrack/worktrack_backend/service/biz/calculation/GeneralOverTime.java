@@ -1,11 +1,13 @@
 package com.marublosso.worktrack.worktrack_backend.service.biz.calculation;
 import java.time.LocalDateTime;
 
+import org.springframework.stereotype.Component;
+
 import com.marublosso.worktrack.worktrack_backend.dto.WorkTimeRequestDto;
 
 import java.time.Duration;
 
-
+@Component
 public class GeneralOverTime implements TimeCalculator {
 
     private static final double STANDARD_HOURS = 9.0;

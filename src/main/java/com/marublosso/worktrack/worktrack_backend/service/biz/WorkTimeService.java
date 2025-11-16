@@ -6,9 +6,11 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import org.springframework.jdbc.core.RowMapper;
+
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
+
 import com.marublosso.worktrack.worktrack_backend.dto.WorkTimeRequestDto;
 import com.marublosso.worktrack.worktrack_backend.service.biz.calculation.GeneralOverTime;
 import com.marublosso.worktrack.worktrack_backend.util.timetools.DaySelector;
@@ -17,15 +19,24 @@ import com.marublosso.worktrack.worktrack_backend.util.timetools.DaySelector;
 public class WorkTimeService {
 	
     private final JdbcTemplate jdbcTemplate;
-	private final GeneralOverTime generalOverTime = new GeneralOverTime();
-	private final DaySelector daySelector = new DaySelector();
+	private final GeneralOverTime generalOverTime;
+	private final DaySelector daySelector;
 
 
-    public WorkTimeService(JdbcTemplate jdbcTemplate) {
+    public WorkTimeService(JdbcTemplate jdbcTemplate, GeneralOverTime generalOverTime, DaySelector daySelector) {
         this.jdbcTemplate = jdbcTemplate;
+		this.generalOverTime = generalOverTime;
+		this.daySelector = daySelector;
     }
 	// 근무시간 DB 기록 ((Input) -> DB(Record))
-    public void recordWorkTime(Long userId, LocalDate workDate, LocalDateTime startTime, LocalDateTime endTime) {
+    public void recordWorkTime(WorkTimeRequestDto request) {
+
+		// DTO객체를 사용해 지역변수 초기화
+		Long userId = request.getUserId();
+		LocalDate workDate = request.getWorkDate();
+		LocalDateTime startTime = request.getStartTime();
+		LocalDateTime endTime = request.getEndTime();
+		String bikou = request.getBikou();
 
 		// 1. 잔업시간, 총근무 시간 계산 (calculateOvertime 부품 사용)
         WorkTimeRequestDto result = generalOverTime.calculateOvertime(userId, startTime, endTime);
@@ -34,8 +45,8 @@ public class WorkTimeService {
     	
 		// 2. SQL문 작성
     	String sql = "INSERT INTO ATTENDANCE " +
-                "(user_id, work_date, start_time, end_time, total_hours, overtime, created_at, updated_at) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                "(user_id, work_date, start_time, end_time, total_hours, overtime, created_at, updated_at, bikou) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ? )";
 
 	   // 현재 시간
 	   Timestamp now = Timestamp.valueOf(LocalDateTime.now());
@@ -50,7 +61,8 @@ public class WorkTimeService {
 	       totalHours,
 	       overtime,
 	       now,
-	       now
+	       now,
+		   bikou
 	   );
     }
 
@@ -92,6 +104,7 @@ public class WorkTimeService {
 					dto.setEndTime(rs.getTimestamp("end_time").toLocalDateTime());
 					dto.setTotalHours(rs.getDouble("total_hours"));
 					dto.setOvertime(rs.getDouble("overtime"));
+					dto.setBikou(rs.getString("bikou"));
 					return dto;
 				}
 			},userId,firstDay, lastDay);

@@ -18,6 +18,7 @@ import com.marublosso.worktrack.worktrack_backend.dto.WorkTimeRequestDto;
 import com.marublosso.worktrack.worktrack_backend.service.biz.WorkTimeService;
 import com.marublosso.worktrack.worktrack_backend.service.checker.errorcheck.ErrorHandler;
 import com.marublosso.worktrack.worktrack_backend.service.checker.errorcheck.WorkTimeChecker;
+import com.marublosso.worktrack.worktrack_backend.service.checker.errorcheck.UserChecker;   
 
 
 @CrossOrigin(origins = "*") // <-- 로컬 테스트용: 필요시 특정 origin으로 변경하세요 (지피티가 써준거 이게 먼지 모름 일단 서버 올리면 지울거임)
@@ -28,32 +29,39 @@ public class WorkTimeController {
     private final WorkTimeService workTimeService;
     private final WorkTimeChecker workTimeChecker;
     private final ErrorHandler errorHandler;
+    private final UserChecker userChecker;
 
-    public WorkTimeController(WorkTimeService workTimeService, WorkTimeChecker workTimeChecker,ErrorHandler errorHandler) {
+    public WorkTimeController(WorkTimeService workTimeService, WorkTimeChecker workTimeChecker,ErrorHandler errorHandler, UserChecker userChecker) {
         this.workTimeService = workTimeService;
         this.workTimeChecker = workTimeChecker;
         this.errorHandler = errorHandler;
+        this.userChecker = userChecker;
     }
     
     //근무시간 DB 기록 (JSON (Input) -> DB(Record))
     @PostMapping("/record")
     public ResponseEntity<String> recordWorkTimeControll(@RequestBody WorkTimeRequestDto request) {
 
-        // 유효성 검사
-        int errorCode = workTimeChecker.isValidWorkTime(request);
-        if (errorCode != 0) {// 에러코드 0 = 정상
+        // TODO Exception 기반으로 변경하기
+        // 출퇴근 시간 유효성 검사
+        int timeErrorCode = workTimeChecker.isValidWorkTime(request);
+        if (timeErrorCode != 0) {// 에러코드 0 = 정상
             return ResponseEntity
                     .badRequest()   
-                    .body(errorHandler.handleError(errorCode));
+                    .body(errorHandler.handleError(timeErrorCode));
+        }
+
+        // 출퇴근 시간 유효성 검사
+        int userErrorCode = userChecker.isValidUser(request);
+        if (userErrorCode != 0) {// 에러코드 0 = 정상
+            return ResponseEntity
+                    .badRequest()   
+                    .body(errorHandler.handleError(userErrorCode));
         }
 
         // 서비스 호출
-        workTimeService.recordWorkTime(
-            request.getUserId(),
-            request.getWorkDate(),
-            request.getStartTime(),
-            request.getEndTime()
-        );
+        // TODO DTO로 호출하게 바꾸는게 나을듯... 왜 이렇게 했지?
+        workTimeService.recordWorkTime(request);
 
         // 시간 포맷 (HH:mm 형식) -> localDateTime 전체 출력하면 너무 길어서 보기 불편
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -65,7 +73,7 @@ public class WorkTimeController {
         + "\r\n"+ "출근시간: " + startTime + "\r\n" + "퇴근시간: " + endTime); 
     }
 
-    //근무시간 조회 (QueryPara(Input) -> Json(Retunn))
+    //근무시간 조회 (QueryPara(Input) -> Json(Return))
     @GetMapping("/{userId}")
     public List<WorkTimeRequestDto> getWorkTimeControll (
             @PathVariable ("userId") Long userId,

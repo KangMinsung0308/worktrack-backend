@@ -18,6 +18,12 @@ public class ErrorHandler {
         System.err.println("에러 핸들러 디버그: " + errorMessage); 
         return errorMessage;
     }
+    if (errorCode == 3) {
+        String errorMessage = "유효하지 않은 사용자입니다.";
+        System.err.println("에러 핸들러 디버그: " + errorMessage);
+        return errorMessage;
+        
+    }
 
     return null; // 에러 없음
     }
