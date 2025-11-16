@@ -3,7 +3,6 @@ package com.marublosso.worktrack.worktrack_backend.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
 import lombok.Data;
 
 @Data
@@ -13,5 +12,8 @@ public class WorkTimeRequestDto {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
     private Double totalHours;
-    private Double overtime;    
+    private Double overtime;
+    private Long worktype;
+    private String bikou;
 }
+

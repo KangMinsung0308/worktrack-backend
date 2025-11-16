@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.marublosso.worktrack.worktrack_backend.service.WorkTimeServiceTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-09-15T06:26:30.136Z" hostname="gangminseongs-MacBook-Air.local" time="0.181">
-  <properties/>
-  <testcase name="getWorkTime_미구현_null반환()" classname="com.marublosso.worktrack.worktrack_backend.service.WorkTimeServiceTest" time="0.143"/>
-  <testcase name="recordWorkTime_정상호출_파라미터검증()" classname="com.marublosso.worktrack.worktrack_backend.service.WorkTimeServiceTest" time="0.035"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
