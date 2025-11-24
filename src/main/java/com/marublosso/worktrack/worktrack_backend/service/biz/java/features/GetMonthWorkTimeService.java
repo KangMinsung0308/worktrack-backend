@@ -1,0 +1,36 @@
+package com.marublosso.worktrack.worktrack_backend.service.biz.java.features;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.marublosso.worktrack.worktrack_backend.dto.WorkTimeRequestDto;
+import com.marublosso.worktrack.worktrack_backend.service.biz.java.util.timetools.DaySelector;
+import com.marublosso.worktrack.worktrack_backend.repository.WorkTimeRepository;
+
+@Service
+public class GetMonthWorkTimeService {
+    private final WorkTimeRepository workTimeRepository;
+
+	private final DaySelector daySelector;
+
+
+    public GetMonthWorkTimeService(DaySelector daySelector, WorkTimeRepository workTimeRepository) {
+        this.workTimeRepository = workTimeRepository;
+		this.daySelector = daySelector;
+
+    }
+
+    // 근무시간 조회 ((Input) -> Json(Return))
+    public List<WorkTimeRequestDto> getWorkTime(
+		Long userId,               	// 사용자 ID
+	    LocalDate workDate			// 근무 날짜    
+    ){
+
+        LocalDate firstDay = daySelector.Firstday(workDate);
+		LocalDate lastDay = daySelector.Lastday(workDate);
+        
+        return workTimeRepository.findWorkTimeByUserAndDateRange(userId, firstDay, lastDay);
+    }
+}
