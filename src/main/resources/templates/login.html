@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>Login Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <h1>Login Page</h1>
+    <div>
+      <label for="username">Username:</label>
+      <input type="text" id="username" required />
+    </div>
+    <div>
+      <label for="password">Password:</label>
+      <input type="password" id="password" required />
+    </div>
+
+    <button id="saveData" type="button">로그인</button>
+    <textarea id="responseData" rows="10" cols="50" readonly></textarea>
+
+    <script>
+      const apiUrl = "http://localhost:8080/worktrack";
+
+      document
+        .getElementById("saveData")
+        .addEventListener("click", async function () {
+          const data = {
+            username: document.getElementById("username").value,
+            password: document.getElementById("password").value,
+          };
+
+          try {
+            const res = await fetch(`${apiUrl}/login`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data),
+            });
+
+            const result = await res.json();
+
+            if (result.success) {
+              window.location.href = result.redirectUrl;
+            } else {
+              // 실패 메시지 화면에 출력
+              document.getElementById("responseData").textContent =
+                result.message;
+            }
+          } catch (err) {
+            alert("로그인 오류: " + err);
+          }
+        });
+    </script>
+  </body>
+</html>
