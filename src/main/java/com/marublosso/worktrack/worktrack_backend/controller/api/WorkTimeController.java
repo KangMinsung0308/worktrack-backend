@@ -2,8 +2,11 @@ package com.marublosso.worktrack.worktrack_backend.controller.api;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,12 +17,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.marublosso.worktrack.worktrack_backend.dto.LoginUserDto;
 import com.marublosso.worktrack.worktrack_backend.dto.WorkTimeRequestDto;
 import com.marublosso.worktrack.worktrack_backend.service.biz.java.errorcheck.ErrorHandler;
 import com.marublosso.worktrack.worktrack_backend.service.biz.java.errorcheck.UserChecker;
 import com.marublosso.worktrack.worktrack_backend.service.biz.java.errorcheck.WorkTimeChecker;
 import com.marublosso.worktrack.worktrack_backend.service.biz.java.features.GetMonthWorkTimeService;
 import com.marublosso.worktrack.worktrack_backend.service.biz.java.features.PostWorkTimeService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @CrossOrigin(origins = "*") // <-- 로컬 테스트용: 필요시 특정 origin으로 변경하세요 (지피티가 써준거 이게 먼지 모름 일단 서버 올리면 지울거임)
 @RestController
@@ -43,7 +50,8 @@ public class WorkTimeController {
 
     // 근무시간 DB 기록 (JSON (Input) -> DB(Record))
     @PostMapping("/record")
-    public ResponseEntity<String> postWorkTimeControll(@RequestBody WorkTimeRequestDto request) {
+    public ResponseEntity<?> postWorkTimeControll(@RequestBody WorkTimeRequestDto request, HttpServletRequest sessionRequest) {
+        Map<String, Object> response = new HashMap<>();
 
         // TODO Exception 기반으로 변경하기
         // 출퇴근 시간 유효성 검사
@@ -62,28 +70,35 @@ public class WorkTimeController {
         // .body(errorHandler.handleError(userErrorCode));
         // }
 
+        // 세션에서 사용자 정보 가져오기
+        HttpSession session = sessionRequest.getSession(false);
+
+        LoginUserDto loginUserDto =(LoginUserDto)session.getAttribute("loginUser");
+
         // 서비스 호출
-        workTimeService.recordWorkTime(request);
+        workTimeService.recordWorkTime(request,loginUserDto);
 
-        // 시간 포맷 (HH:mm 형식) -> localDateTime 전체 출력하면 너무 길어서 보기 불편
-        // TODO 포멧 변환 처리는 서버에서 할지 클라이언트에서 할지 고민해봐야겠음
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+        response.put("success", true);
 
-        String startTime = request.getStartTime().format(timeFormatter);
-        String endTime = request.getEndTime().format(timeFormatter);
-
-        return ResponseEntity.ok("근무시간 기록 완료! 규히야 민성아 수고했어!!" + "\r\n" + "사용자ID: " + request.getUserId() + "\r\n"
-                + "날짜: " + request.getWorkDate()
-                + "\r\n" + "출근시간: " + startTime + "\r\n" + "퇴근시간: " + endTime);
+        return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(response);
     }
 
     // 근무시간 조회 (QueryPara(Input) -> Json(Return))
-    @GetMapping("/{userId}")
-    public List<WorkTimeRequestDto> getWorkTimeControll(
-            @PathVariable("userId") Long userId,
-            @RequestParam("workDate") LocalDate workDate) {
+    @GetMapping("/{workDate}")
+    public ResponseEntity<?> getWorkTimeControll(
+            @PathVariable("workDate") LocalDate workDate,
+            HttpServletRequest sessionRequest) 
+        {
+
+        // 세션에서 사용자 정보 가져오기
+        HttpSession session = sessionRequest.getSession(false);
+
+        LoginUserDto loginUserDto =(LoginUserDto)session.getAttribute("loginUser");
+
         // 서비스 호출
-        List<WorkTimeRequestDto> results = GetMonthWorkTimeService.getWorkTime(userId, workDate);
-        return results;
+        List<WorkTimeRequestDto> results = GetMonthWorkTimeService.getWorkTime(workDate,loginUserDto);
+        return ResponseEntity.ok(results);
     }
 }

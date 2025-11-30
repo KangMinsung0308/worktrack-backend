@@ -1,0 +1,233 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  background: white;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  align-items: center;
+  width: 100%;
+  max-width: 327px;
+}
+
+.logo {
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-size: 40px;
+  font-weight: 900;
+  color: black;
+  text-align: center;
+  letter-spacing: -0.4px;
+  line-height: 1.5;
+  font-style: italic;
+}
+
+.input-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.input-wrapper {
+  background: white;
+  height: 40px;
+  position: relative;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.input-border {
+  position: absolute;
+  border: 1px solid #e0e0e0;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 8px;
+}
+
+.input-container {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  padding: 8px 16px;
+}
+
+input {
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-weight: normal;
+  flex: 1;
+  font-size: 14px;
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  line-height: 1.4;
+}
+
+input::placeholder {
+  color: #d0d0d0;
+}
+
+.login-button {
+  background: black;
+  height: 40px;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+
+.login-button:hover {
+  background: #333;
+}
+
+.login-button:active {
+  transform: scale(0.98);
+}
+
+.login-button-text {
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: white;
+  line-height: 1.4;
+}
+
+.divider {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.divider-line {
+  flex: 1;
+  background: #e6e6e6;
+  height: 1px;
+}
+
+.divider-text {
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-weight: normal;
+  font-size: 14px;
+  color: #828282;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.buttons-section {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.social-button {
+  background: #eeeeee;
+  height: 40px;
+  border-radius: 8px;
+  width: 100%;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.2s;
+  border: none;
+  margin-top: 8px;
+}
+
+.social-button:first-child {
+  margin-top: 0;
+}
+
+.social-button:hover {
+  background: #e0e0e0;
+}
+
+.social-button:active {
+  transform: scale(0.98);
+}
+
+.social-button-content {
+  position: absolute;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.social-button-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-button-text {
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: black;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* Toast styles */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  z-index: 1000;
+  animation: slideUp 0.3s ease-out;
+}
+
+.toast.hide {
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+}

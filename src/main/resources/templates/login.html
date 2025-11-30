@@ -5,20 +5,111 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>Login Page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      /* 전체 페이지 스타일 */
+      body {
+        font-family: Arial, sans-serif;
+        background: #f5f5f5;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      /* 로그인 컨테이너 */
+      .login-container {
+        background: #ffffff;
+        padding: 40px 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        width: 100%;
+        max-width: 400px;
+      }
+
+      /* 제목 */
+      h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+      }
+
+      /* 입력 필드 공통 스타일 */
+      .login-container label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: bold;
+        color: #555;
+      }
+
+      .login-container input {
+        width: 100%;
+        padding: 10px 12px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 16px;
+        box-sizing: border-box;
+        transition: border-color 0.2s;
+      }
+
+      .login-container input:focus {
+        border-color: #4A90E2;
+        outline: none;
+      }
+
+      /* 버튼 스타일 */
+      #saveData {
+        width: 100%;
+        padding: 12px;
+        background-color: #4A90E2;
+        color: white;
+        font-size: 16px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+
+      #saveData:hover {
+        background-color: #357ABD;
+      }
+
+      /* textarea 출력 영역 */
+      #responseData {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        resize: none;
+        font-family: monospace;
+        color: #c0392b;
+      }
+
+      /* 반응형 */
+      @media (max-width: 480px) {
+        .login-container {
+          padding: 30px 20px;
+        }
+      }
+    </style>
   </head>
   <body>
-    <h1>Login Page</h1>
-    <div>
-      <label for="username">Username:</label>
-      <input type="text" id="username" required />
-    </div>
-    <div>
-      <label for="password">Password:</label>
-      <input type="password" id="password" required />
-    </div>
+    <div class="login-container">
+      <h1>Login Page</h1>
+      <div>
+        <label for="username">Username:</label>
+        <input type="text" id="username" required />
+      </div>
+      <div>
+        <label for="password">Password:</label>
+        <input type="password" id="password" required />
+      </div>
 
-    <button id="saveData" type="button">로그인</button>
-    <textarea id="responseData" rows="10" cols="50" readonly></textarea>
+      <button id="saveData" type="button">로그인</button>
+      <textarea id="responseData" rows="5" cols="50" readonly></textarea>
+    </div>
 
     <script>
       const apiUrl = "http://localhost:8080/worktrack";
@@ -43,7 +134,6 @@
             if (result.success) {
               window.location.href = result.redirectUrl;
             } else {
-              // 실패 메시지 화면에 출력
               document.getElementById("responseData").textContent =
                 result.message;
             }

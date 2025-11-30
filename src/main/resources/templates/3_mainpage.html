@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>근무 관리</title>
+    <link rel="stylesheet" href="../css/2_LogInpage.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="/css/3_mainpage.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fugaz+One&family=Inter:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Logo -->
+        <div class="logo-section">
+            <div class="logo-text">T</div>
+            <div class="company-info">
+                <p class="company-name" th:text = "${genBa}"></p>
+                <p class="user-name" th:text="|${userName}님|"></p>
+                <p class="company-message">오늘 근무도 화이팅!</p>
+            </div>
+        </div>
+
+        <!-- Main Form -->
+        <div class="form-container">
+            <!-- Date Field -->
+            <div class="form-box">
+                <div style="margin-bottom: 16px;">
+                    <label class="form-label">근무 날짜(수정 가능)</label>
+                    <div class="date-picker-wrapper">
+                        <button class="date-button" id="dateButton">
+                            <span id="dateText"></span>
+                            <svg class="arrow-icon" fill="none" preserveAspectRatio="none" viewBox="0 0 15 7">
+                                <path d="M1.00009 5.5L7.50009 1L14.0001 5.5" stroke="#828282" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+                            </svg>
+                        </button>
+                        <div class="date-picker-dropdown" id="datePicker">
+                            <input type="date" class="date-input" id="dateInput">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Time Fields -->
+                <div class="time-fields">
+                    <div class="time-field">
+                        <label class="form-label">출근 시간</label>
+                        <input type="time" class="time-input" id="startTime" value="09:00">
+                    </div>
+                    <div class="time-field">
+                        <label class="form-label">퇴근 시간</label>
+                        <input type="time" class="time-input" id="endTime" value="18:00">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Half Day Toggle -->
+            <div class="half-day-box">
+                <p class="half-day-label">반차 사용</p>
+                <div class="toggle-button" id="toggleButton">
+                    <div class="toggle-bg" id="toggleBg"></div>
+                    <div class="toggle-circle" id="toggleCircle"></div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <button class="submit-button" id="submitButton">추가</button>
+
+            <!-- Navigation Buttons -->
+            <div class="nav-container">
+                <div class="nav-buttons">
+                    <svg class="nav-svg" fill="none" preserveAspectRatio="none" viewBox="0 0 126 51">
+                        <g id="Group 5">
+                            <g filter="url(#filter0_i_1_67)">
+                                <rect fill="#EEEEEE" height="51" rx="24.5" width="126"/>
+                            </g>
+                            <g class="nav-icon" id="calendarIcon">
+                                <rect height="23.999" stroke="black" stroke-width="0.001" width="23.999" x="20.0005" y="14.0005" fill="transparent"/>
+                                <path d="M28.037 16.0142C27.485 16.0142 27.037 16.4622 27.037 17.0142C24.826 17.0142 23.0059 18.8072 23.0059 21.0142V23.0142L23.037 31.0142C23.037 33.2202 24.828 35.0142 27.037 35.0142H37.037C39.246 35.0142 41.037 33.2232 41.037 31.0142L41.0059 23.0142V21.0142C41.0059 18.8032 39.244 17.0142 37.037 17.0142C37.037 16.4622 36.59 16.0142 36.037 16.0142C35.485 16.0142 35.037 16.4622 35.037 17.0142H29.037C29.037 16.4622 28.59 16.0142 28.037 16.0142ZM27.037 19.0142C27.037 19.5662 27.485 20.0142 28.037 20.0142C28.59 20.0142 29.037 19.5662 29.037 19.0142H35.037C35.037 19.5662 35.485 20.0142 36.037 20.0142C36.59 20.0142 37.037 19.5662 37.037 19.0142C38.134 19.0142 39.0059 19.9022 39.0059 21.0142V22.0142C37.0819 22.0142 26.9299 22.0142 25.0059 22.0142V21.0142C25.0059 19.9172 25.925 19.0142 27.037 19.0142ZM25.0059 24.0142C26.9299 24.0142 37.0819 24.0142 39.0059 24.0142L39.037 31.0142C39.037 32.1152 38.142 33.0142 37.037 33.0142H27.037C25.933 33.0142 25.037 32.1192 25.037 31.0142L25.0059 24.0142Z" fill="#000" id="calendarPath"/>
+                            </g>
+                            <g class="nav-icon" id="peopleIcon">
+                                <rect height="23.999" stroke="black" stroke-width="0.001" width="23.999" x="87.0005" y="14.0005" fill="transparent"/>
+                                <path d="M96.5 17C94.0147 17 92 19.015 92 21.5C92 23.985 94.0147 26 96.5 26C98.9853 26 101 23.985 101 21.5C101 19.015 98.9853 17 96.5 17ZM89 18C86.7909 18 85 19.791 85 22C85 24.209 86.7909 26 89 26C89.8294 26 90.615 25.747 91.2812 25.281C91.7339 24.965 91.8476 24.328 91.5312 23.875C91.2148 23.422 90.6089 23.34 90.1562 23.656C89.8233 23.889 89.4162 24 89 24C87.8954 24 87 23.105 87 22C87 20.895 87.8954 20 89 20C89.3262 20 89.6246 20.072 89.9062 20.219C90.3962 20.474 91.0264 20.302 91.2812 19.812C91.5361 19.323 91.3337 18.692 90.8438 18.438C90.2787 18.144 89.6494 18 89 18ZM96.5 19C97.8807 19 99 20.119 99 21.5C99 22.881 97.8807 24 96.5 24C95.1193 24 94 22.881 94 21.5C94 20.119 95.1193 19 96.5 19ZM86.0625 27.344C84.2284 28.101 83 29.956 83 32V34C83 34.552 83.4477 35 84 35H88C88.5523 35 89 34.552 89 34C89 33.448 88.5523 33 88 33H85V32C85 30.876 85.6667 29.844 86.433 29.39C87.1537 29.694 87.9161 29.924 88.5941 29.981C89.1445 30.028 89.6408 29.613 89.6875 29.062C89.7342 28.512 89.3365 28.046 88.7862 27.999C88.3472 27.962 87.8674 27.83 87.3125 27.594C87.1785 27.537 87.1007 27.492 86.8438 27.375C86.5919 27.26 86.3183 27.238 86.0625 27.344ZM93.0625 27.344C91.2284 28.101 90 29.956 90 32V34C90 34.552 90.4477 35 91 35H102C102.552 35 103 34.552 103 34V32C103 30.004 101.765 28.194 99.9375 27.406C99.6803 27.295 99.3806 27.292 99.125 27.406C98.2402 27.803 97.3782 28 96.5 28C95.6248 28 94.7598 27.792 93.8438 27.375C93.5919 27.26 93.3183 27.238 93.0625 27.344ZM93.447 29.39C94.3918 29.748 95.5309 30 96.5 30C97.4615 30 98.5535 29.765 99.4792 29.423C100.382 29.937 101 30.899 101 32V33H92V32C92 30.835 92.6559 29.853 93.447 29.39Z" fill="#2A343D" id="peoplePath"/>
+                            </g>
+                            <path d="M63 10V41" stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-opacity="0.2" stroke-width="3"/>
+                        </g>
+                        <defs>
+                            <filter color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse" height="51" id="filter0_i_1_67" width="126" x="0" y="0">
+                                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                                <feBlend in="SourceGraphic" in2="BackgroundImageFix" mode="normal" result="shape"/>
+                                <feColorMatrix in="SourceAlpha" result="hardAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+                                <feOffset/>
+                                <feGaussianBlur stdDeviation="2"/>
+                                <feComposite in2="hardAlpha" k2="-1" k3="1" operator="arithmetic"/>
+                                <feColorMatrix type="matrix" values="0 0 0 0 0.509804 0 0 0 0 0.509804 0 0 0 0 0.509804 0 0 0 0.25 0"/>
+                                <feBlend in2="shape" mode="normal" result="effect1_innerShadow_1_67"/>
+                            </filter>
+                        </defs>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <script src="/js/3_mainpage.js"></script>
+
+</body>
+</html>

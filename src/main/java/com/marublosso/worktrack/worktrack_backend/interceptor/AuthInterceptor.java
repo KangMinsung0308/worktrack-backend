@@ -21,6 +21,14 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         HttpSession session = request.getSession(false);
 
+        String uri = request.getRequestURI();
+        boolean isApi = uri.startsWith("/api/");
+        
+        //html 페이지 요청이 아닌 경우에는 세션 체크를 하지 않음
+        if(!isApi){
+            return true;
+        }
+
         if (session == null || session.getAttribute("loginUser") == null) {
             // Map으로 데이터 준비
             Map<String, Object> resMap = new HashMap<>();

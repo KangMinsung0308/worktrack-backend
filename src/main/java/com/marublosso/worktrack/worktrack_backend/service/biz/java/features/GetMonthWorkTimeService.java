@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.marublosso.worktrack.worktrack_backend.dto.LoginUserDto;
 import com.marublosso.worktrack.worktrack_backend.dto.WorkTimeRequestDto;
 import com.marublosso.worktrack.worktrack_backend.service.biz.java.util.timetools.DaySelector;
 import com.marublosso.worktrack.worktrack_backend.repository.WorkTimeRepository;
@@ -24,13 +25,13 @@ public class GetMonthWorkTimeService {
 
     // 근무시간 조회 ((Input) -> Json(Return))
     public List<WorkTimeRequestDto> getWorkTime(
-		Long userId,               	// 사용자 ID
-	    LocalDate workDate			// 근무 날짜    
-    ){
+	    LocalDate workDate,			// 근무 날짜    
+        LoginUserDto loginUserDto   // 로그인한 사용자 정보
+    )   {
 
         LocalDate firstDay = daySelector.Firstday(workDate);
 		LocalDate lastDay = daySelector.Lastday(workDate);
         
-        return workTimeRepository.findWorkTimeByUserAndDateRange(userId, firstDay, lastDay);
+        return workTimeRepository.findWorkTimeByUserAndDateRange(loginUserDto.getId(), firstDay, lastDay);
     }
 }

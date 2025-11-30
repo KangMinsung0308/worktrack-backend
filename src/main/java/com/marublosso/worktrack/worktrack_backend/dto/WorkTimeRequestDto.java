@@ -14,4 +14,5 @@ public class WorkTimeRequestDto {
     private Double overtime;
     private Long workType;
     private String bikou;
+    private boolean isHalfDay;
 }

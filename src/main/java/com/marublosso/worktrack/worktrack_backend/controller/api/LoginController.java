@@ -8,8 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import com.marublosso.worktrack.worktrack_backend.dto.LoginUserDto;
+import com.marublosso.worktrack.worktrack_backend.dto.LoginRequestDto;
 import com.marublosso.worktrack.worktrack_backend.entity.User;
+import com.marublosso.worktrack.worktrack_backend.dto.LoginUserDto;
 import com.marublosso.worktrack.worktrack_backend.service.biz.java.features.LoginService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,13 +27,13 @@ public class LoginController {
         this.loginService = loginService;
     }
 
-    @PostMapping("/worktrack/login")
-    public ResponseEntity<?> login(@RequestBody LoginUserDto loginUserDto, HttpServletRequest request) {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
 
-        User user = loginService.login(loginUserDto);
-        if (user != null) {
-            request.getSession(true).setAttribute("loginUser", user);
+        LoginUserDto loginUserDto = loginService.login(loginRequestDto);
+        if (loginUserDto != null) {
+            request.getSession(true).setAttribute("loginUser", loginUserDto);
             response.put("success", true);
             response.put("redirectUrl", "/worktrack");
             return ResponseEntity.ok()
@@ -47,6 +48,4 @@ public class LoginController {
                     .body(response);
         }
     }
-
-
 }

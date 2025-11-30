@@ -5,6 +5,7 @@ import com.marublosso.worktrack.worktrack_backend.entity.User;
 import org.springframework.stereotype.Service;
 
 import com.marublosso.worktrack.worktrack_backend.repository.LoginRepository;
+import com.marublosso.worktrack.worktrack_backend.dto.LoginRequestDto;
 
 
 
@@ -18,17 +19,25 @@ public class LoginService {
         this.loginRepository = loginRepository;
     }
     
-    public User login(LoginUserDto userDto) {
+    public LoginUserDto login(LoginRequestDto userRequestDto) {
 
         // TODO : 유효성 검사 
+
+        // DTO -> Entity 변환
         User user = User.builder()
-                .username(userDto.getUsername())
-                .password_hash(userDto.getPassword())
+                .username(userRequestDto.getUsername())
+                .password_hash(userRequestDto.getPassword())
                 .build();
 
+        // 유저 정보 조회
+        User foundUser = loginRepository.SearchUserInfo(user);
 
-        // 로그인 로직 구현
-        return loginRepository.SearchUserInfo(user);
+        // 로그인 실패
+        if (foundUser == null) {
+            return null;
+        }
+        // 로그인 성공
+        return LoginUserDto.from(loginRepository.SearchUserInfo(foundUser));
 
     }
 

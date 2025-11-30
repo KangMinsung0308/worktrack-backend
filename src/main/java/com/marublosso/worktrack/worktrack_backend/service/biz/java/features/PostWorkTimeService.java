@@ -2,6 +2,7 @@ package com.marublosso.worktrack.worktrack_backend.service.biz.java.features;
 
 import org.springframework.stereotype.Service;
 
+import com.marublosso.worktrack.worktrack_backend.dto.LoginUserDto;
 import com.marublosso.worktrack.worktrack_backend.dto.WorkTimeRequestDto;
 import com.marublosso.worktrack.worktrack_backend.service.biz.java.util.timetools.GeneralOverTime;
 import com.marublosso.worktrack.worktrack_backend.repository.WorkTimeRepository;
@@ -17,18 +18,20 @@ public class PostWorkTimeService {
 		this.workTimeRepository = workTimeRepository;
     }
 	// 근무시간 DB 기록 ((Input) -> DB(Record))
-    public void recordWorkTime(WorkTimeRequestDto request) {
+    public void recordWorkTime(WorkTimeRequestDto request, LoginUserDto loginUser) {
+
+
 
 		// 1. 잔업시간, 총근무 시간 계산
         WorkTimeRequestDto result = generalOverTime.calculateOvertime(
-            request.getUserId(),
+            loginUser.getId(),
             request.getStartTime(),
             request.getEndTime()
         );
 
 		// 2. DTO 생성 및 값 설정
 		WorkTimeRequestDto workTimeToSave = new WorkTimeRequestDto();
-        workTimeToSave.setUserId(request.getUserId());
+        workTimeToSave.setUserId(loginUser.getId());
         workTimeToSave.setWorkDate(request.getWorkDate());
         workTimeToSave.setStartTime(request.getStartTime());
         workTimeToSave.setEndTime(request.getEndTime());
