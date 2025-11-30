@@ -1,0 +1,24 @@
+/* Toast styles */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #333;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  z-index: 1000;
+  animation: slideUp 0.3s ease-out;
+
+  white-space: nowrap;      /* 줄바꿈 완전 금지 */
+  overflow: hidden;         /* 넘친 글자 숨기기 */
+  text-overflow: ellipsis;  /* ... 처리 */
+  max-width: 90%;           /* 너무 길면 화면 밖으로 안 나가게 */
+}
+
+
+.toast.hide {
+  animation: slideDown 0.3s ease-out;
+}
