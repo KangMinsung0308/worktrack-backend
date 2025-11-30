@@ -95,8 +95,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const result = await res.json();
 
       if (result.success) {
-        alert(
-          `근무 정보가 추가되었습니다!\n출근: ${startDateTime}\n퇴근: ${endDateTime}\n반차: ${isHalfDay ? "사용" : "미사용"}`
+        showToast(
+          `근무 정보가 추가되었습니다!<br>출근: ${startDateTime.split("T")[1].substring(0, 5)}<br>퇴근: ${endDateTime.split("T")[1].substring(0, 5)}<br>반차: ${isHalfDay ? "사용" : "미사용"}`
         );
       } else {
         alert(`등록 실패: ${result.message}`);
@@ -128,4 +128,19 @@ document.addEventListener("DOMContentLoaded", () => {
       datePicker.classList.remove("active");
     }
   });
+
+  // Toast 메시지 함수
+  function showToast(message) {
+    const toast = document.createElement("div");
+    toast.className = "toast";
+    toast.innerHTML = message
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.classList.add("hide");
+      setTimeout(() => {
+        document.body.removeChild(toast);
+      }, 300);
+    }, 2000);
+  }
 });

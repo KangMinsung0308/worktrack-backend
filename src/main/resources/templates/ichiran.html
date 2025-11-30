@@ -2,165 +2,14 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/css/ichiran.css" />
+    <link rel="stylesheet" href="/css/common.css" />
+
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
     />
     <title>출퇴근 기록 테스트</title>
-    <style>
-      /* 기본 스타일 */
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0; /* ← 불균형 원인인 margin 제거 */
-        padding: 16px; /* ← 좌우 여백 균등하게 */
-        box-sizing: border-box; /* ← 패딩 포함해서 폭 계산 */
-        background-color: #f7f7f7;
-      }
-      h1 {
-        text-align: center;
-        color: #333;
-      }
-      h2 {
-        color: #555;
-        margin-top: 20px;
-      }
-
-      form,
-      .container {
-        background: #fff;
-        padding: 15px;
-        border-radius: 8px;
-        box-sizing: border-box;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        margin-top: 20px;
-        width: 100%;
-      }
-
-      .listbox {
-        width: 200px;
-        padding: 8px;
-        margin-top: 20px;
-        margin-bottom: 20px;
-        border-radius: 6px;
-        font-size: 14px;
-        box-sizing: border-box;
-      }
-
-      label {
-        display: inline-block;
-        font-size: 16px; /* iOS 자동 확대 방지 */
-        line-height: 1.2;
-        transform: scale(1); /* 렌더링 버그 방지 */
-        -webkit-text-size-adjust: 100%;
-        -webkit-appearance: none;
-        appearance: none; /* 표준 속성 */
-        -moz-appearance: none; /* Firefox 구버전용 */
-
-        width: 100%;
-        margin-bottom: 10px;
-        color: #333;
-        box-sizing: border-box;
-      }
-
-      input[type="text"],
-      input[type="date"],
-      input[type="time"],
-      input[type="number"] {
-        width: 100%;
-        padding: 10px;
-        margin-top: 5px;
-        border-radius: 4px;
-        border: 1px solid #ccc;
-        box-sizing: border-box;
-      }
-
-      button {
-        width: 100%;
-        padding: 12px;
-        background-color: #161616;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        margin-top: 10px;
-        box-sizing: border-box;
-      }
-
-      button:hover {
-        background-color: #2e2e2e;
-      }
-
-      pre {
-        background: #fff;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px #0000001a;
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        box-sizing: border-box;
-      }
-
-      /* 테이블 스타일 */
-      #workTimeTable {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0;
-        margin-top: 15px;
-        font-family: "Arial", sans-serif;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        font-size: 12px;
-      }
-
-      #workTimeTable th,
-      #workTimeTable td {
-        padding: 10px;
-        text-align: center;
-      }
-
-      #workTimeTable thead {
-        background: linear-gradient(135deg, #404040, #404040);
-        color: #fff;
-        font-weight: bold;
-      }
-
-      #workTimeTable tbody tr {
-        background-color: #ffffff;
-        transition: all 0.3s ease;
-      }
-
-      #workTimeTable tbody tr:hover {
-        background-color: #ffffff;
-        transform: scale(1.02);
-        cursor: pointer;
-      }
-
-      #workTimeTable th:first-child {
-        border-top-left-radius: 12px;
-      }
-      #workTimeTable th:last-child {
-        border-top-right-radius: 12px;
-      }
-      #workTimeTable td:first-child {
-        border-bottom-left-radius: 12px;
-      }
-      #workTimeTable td:last-child {
-        border-bottom-right-radius: 12px;
-      }
-
-      /* PC 화면 유지용 */
-      @media (min-width: 600px) {
-        body {
-          max-width: 600px;
-          margin: 40px auto;
-          padding: 0 20px;
-        }
-        #workTimeTable {
-          font-size: 14px;
-        }
-      }
-    </style>
   </head>
   <body>
     <!-- GET: 출퇴근 기록 조회 -->
@@ -183,39 +32,9 @@
         </thead>
         <tbody></tbody>
       </table>
+
+      <button id="postLogout" type="submit">로그아웃</button>
     </div>
-
-    <script>
-      const apiUrl = "http://localhost:8080/worktrack";
-      //const apiUrl = "http://13.231.93.50:8080/worktrack";
- 
-
-      // GET: 기록 조회
-      document
-        .getElementById("loadData")
-        .addEventListener("click", function () {
-          const workDate = document.getElementById("getWorkDate").value;
-          
-          fetch(`${apiUrl}/${workDate}`)
-            .then((res) => res.json())
-            .then((data) => {
-              const tbody = document.querySelector("#workTimeTable tbody");
-              tbody.innerHTML = "";
-
-              data.forEach((item) => {
-                const tr = document.createElement("tr");
-                tr.innerHTML = `
-                        <td>${item.workDate}</td>
-                        <td>${item.startTime}</td>
-                        <td>${item.endTime}</td>
-                        <td>${item.totalHours}</td>
-                        <td>${item.overtime}</td>
-                    `;
-                tbody.appendChild(tr);
-              });
-            })
-            .catch((err) => alert("조회 오류: " + err));
-        });
-    </script>
   </body>
+  <script src="/js/ichiran.js"></script>
 </html>

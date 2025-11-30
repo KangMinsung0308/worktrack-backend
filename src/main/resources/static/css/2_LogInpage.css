@@ -191,24 +191,6 @@ input::placeholder {
   white-space: nowrap;
 }
 
-/* Toast styles */
-.toast {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #333;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 14px;
-  z-index: 1000;
-  animation: slideUp 0.3s ease-out;
-}
-
-.toast.hide {
-  animation: slideDown 0.3s ease-out;
-}
 
 @keyframes slideUp {
   from {
