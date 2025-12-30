@@ -5,5 +5,9 @@ import java.time.LocalDateTime;
 import com.marublosso.worktrack.worktrack_backend.dto.WorkTimeRequestDto;
 
 public interface TimeCalculator {
-    WorkTimeRequestDto calculateOvertime(Long worktype,LocalDateTime startTime, LocalDateTime endTime);
+    // TODO 삭제
+    WorkTimeRequestDto calculateOvertime(Long worktype, LocalDateTime startTime, LocalDateTime endTime);
+
+    Double calculateOnlyWorkTime(LocalDateTime startTime, LocalDateTime endTime, Double YasumiTime);
+    Double calculateOnlyOvertime(LocalDateTime startTime, LocalDateTime endTime, Double YasumiTime);
 }

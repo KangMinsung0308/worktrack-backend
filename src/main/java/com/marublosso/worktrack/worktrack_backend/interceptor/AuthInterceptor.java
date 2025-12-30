@@ -23,17 +23,21 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         String uri = request.getRequestURI();
         boolean isApi = uri.startsWith("/api/");
-        
-        //html 페이지 요청이 아닌 경우에는 세션 체크를 하지 않음
-        if(!isApi){
+
+        // html 페이지 요청이 아닌 경우에는 세션 체크를 하지 않음
+        if (!isApi) {
             return true;
         }
 
-        if (session == null || session.getAttribute("loginUser") == null) {
+        boolean isOnline = session != null
+                && Boolean.TRUE.equals(session.getAttribute("Session_Online"));
+
+        if (!isOnline) {
             // Map으로 데이터 준비
             Map<String, Object> resMap = new HashMap<>();
             resMap.put("success", false);
-            resMap.put("redirectUrl", "/worktrack/login");
+            resMap.put("message", "세션이 만료되었습니다");
+            resMap.put("redirectUrl", "/login");
 
             // JSON으로 변환
             ObjectMapper objectMapper = new ObjectMapper();

@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+
   // DOM 요소
   const dateButton = document.getElementById("dateButton");
   const dateText = document.getElementById("dateText");
@@ -10,17 +11,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const toggleBg = document.getElementById("toggleBg");
   const toggleCircle = document.getElementById("toggleCircle");
   const submitButton = document.getElementById("submitButton");
-  const calendarIcon = document.getElementById("calendarIcon");
-  const peopleIcon = document.getElementById("peopleIcon");
-  const calendarPath = document.getElementById("calendarPath");
-  const peoplePath = document.getElementById("peoplePath");
 
-  const apiUrl = "http://localhost:8080/worktrack/record";
+  const navButtons = document.querySelectorAll("[data-nav]");
 
   // 상태 변수
   let isHalfDay = false;
   let isDatePickerOpen = false;
-  let activeTab = "calendar";
+  let activeTab = "main";
 
   // --------------------
   // 초기 날짜 세팅 (오늘)
@@ -82,12 +79,12 @@ document.addEventListener("DOMContentLoaded", () => {
       workDate: date,
       startTime: startDateTime,
       endTime: endDateTime,
-      isHalfDay,
+      workType: isHalfDay ? 2 : 0,
     };
 
     try {
-      const res = await fetch(apiUrl, {
-        method: "POST",
+      const res = await fetch(API_URL_PUT_WORKTIME, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
@@ -96,30 +93,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (result.success) {
         showToast(
-          `근무 정보가 추가되었습니다!<br>출근: ${startDateTime.split("T")[1].substring(0, 5)}<br>퇴근: ${endDateTime.split("T")[1].substring(0, 5)}<br>반차: ${isHalfDay ? "사용" : "미사용"}`
+          `근무 정보가 추가되었습니다!
+          출근: ${startDateTime.split("T")[1].substring(0, 5)}
+          퇴근: ${endDateTime.split("T")[1].substring(0, 5)}
+          반차: ${isHalfDay ? "사용" : "미사용"}`
         );
       } else {
-        alert(`등록 실패: ${result.message}`);
+        alert(`${MESSAGE_CLIENT_ERR} ${result.message}`);
       }
     } catch (err) {
-      alert("등록 오류: " + err);
+      alert(`${MESSAGE_SERVER_ERR}` + err);
     }
   });
 
-  // --------------------
-  // Navigation tabs
-  calendarIcon.addEventListener("click", () => {
-    activeTab = "calendar";
-    calendarPath.setAttribute("fill", "#000");
-    peoplePath.setAttribute("fill", "#2A343D");
-  });
-  peopleIcon.addEventListener("click", () => {
-    activeTab = "people";
-    calendarPath.setAttribute("fill", "#2A343D");
-    peoplePath.setAttribute("fill", "#000");
-
-    window.location.href = "/worktrack/ichiran";
-  });
+  // 페이지 로드 시 초기 스타일 설정
+  updateButtonStyles("main");
 
   // Close date picker when clicking outside
   document.addEventListener("click", (e) => {
@@ -128,19 +116,4 @@ document.addEventListener("DOMContentLoaded", () => {
       datePicker.classList.remove("active");
     }
   });
-
-  // Toast 메시지 함수
-  function showToast(message) {
-    const toast = document.createElement("div");
-    toast.className = "toast";
-    toast.innerHTML = message
-    document.body.appendChild(toast);
-
-    setTimeout(() => {
-      toast.classList.add("hide");
-      setTimeout(() => {
-        document.body.removeChild(toast);
-      }, 300);
-    }, 2000);
-  }
 });

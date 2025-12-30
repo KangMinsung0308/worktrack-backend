@@ -191,6 +191,26 @@ input::placeholder {
   white-space: nowrap;
 }
 
+/* Signup Section */
+.signup-section {
+  margin-top: 16px;
+  text-align: center;
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  color: #666;
+}
+
+.signup-link {
+  color: black;
+  text-decoration: none;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 4px;
+}
+
+.signup-link:hover {
+  text-decoration: underline;
+}
 
 @keyframes slideUp {
   from {

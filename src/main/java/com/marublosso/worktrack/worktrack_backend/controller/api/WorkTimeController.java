@@ -1,104 +1,93 @@
 package com.marublosso.worktrack.worktrack_backend.controller.api;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.marublosso.worktrack.worktrack_backend.dto.LoginUserDto;
+import com.marublosso.worktrack.worktrack_backend.dto.PutWorktimeRequestDto;
 import com.marublosso.worktrack.worktrack_backend.dto.WorkTimeRequestDto;
-import com.marublosso.worktrack.worktrack_backend.service.biz.java.errorcheck.ErrorHandler;
-import com.marublosso.worktrack.worktrack_backend.service.biz.java.errorcheck.UserChecker;
-import com.marublosso.worktrack.worktrack_backend.service.biz.java.errorcheck.WorkTimeChecker;
+import com.marublosso.worktrack.worktrack_backend.exception.InvalidWorkTimeException;
 import com.marublosso.worktrack.worktrack_backend.service.biz.java.features.GetMonthWorkTimeService;
-import com.marublosso.worktrack.worktrack_backend.service.biz.java.features.PostWorkTimeService;
+import com.marublosso.worktrack.worktrack_backend.service.biz.java.features.PutWorkTimeService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
-@CrossOrigin(origins = "*") // <-- 로컬 테스트용: 필요시 특정 origin으로 변경하세요 (지피티가 써준거 이게 먼지 모름 일단 서버 올리면 지울거임)
 @RestController
-@RequestMapping("/worktrack")
+@RequestMapping("/api")
 public class WorkTimeController {
 
-    private final PostWorkTimeService workTimeService;
     private final GetMonthWorkTimeService GetMonthWorkTimeService;
-    private final WorkTimeChecker workTimeChecker;
-    private final ErrorHandler errorHandler;
-    // private final UserChecker userChecker;
+    private final PutWorkTimeService putWorkTimeService;
 
-    public WorkTimeController(PostWorkTimeService workTimeService, WorkTimeChecker workTimeChecker,
-            ErrorHandler errorHandler, UserChecker userChecker, GetMonthWorkTimeService GetMonthWorkTimeService) {
-        this.workTimeService = workTimeService;
-        this.workTimeChecker = workTimeChecker;
-        this.errorHandler = errorHandler;
-        // this.userChecker = userChecker;
+    public WorkTimeController( GetMonthWorkTimeService GetMonthWorkTimeService,
+            PutWorkTimeService putWorkTimeService) {
         this.GetMonthWorkTimeService = GetMonthWorkTimeService;
-    }
-
-    // 근무시간 DB 기록 (JSON (Input) -> DB(Record))
-    @PostMapping("/record")
-    public ResponseEntity<?> postWorkTimeControll(@RequestBody WorkTimeRequestDto request, HttpServletRequest sessionRequest) {
-        Map<String, Object> response = new HashMap<>();
-
-        // TODO Exception 기반으로 변경하기
-        // 출퇴근 시간 유효성 검사
-        int timeErrorCode = workTimeChecker.isValidWorkTime(request);
-        if (timeErrorCode != 0) {// 에러코드 0 = 정상
-            return ResponseEntity
-                    .badRequest()
-                    .body(errorHandler.handleError(timeErrorCode));
-        }
-
-        // 출퇴근 시간 유효성 검사
-        // int userErrorCode = userChecker.isValidUser(request);
-        // if (userErrorCode != 0) {// 에러코드 0 = 정상
-        // return ResponseEntity
-        // .badRequest()
-        // .body(errorHandler.handleError(userErrorCode));
-        // }
-
-        // 세션에서 사용자 정보 가져오기
-        HttpSession session = sessionRequest.getSession(false);
-
-        LoginUserDto loginUserDto =(LoginUserDto)session.getAttribute("loginUser");
-
-        // 서비스 호출
-        workTimeService.recordWorkTime(request,loginUserDto);
-
-        response.put("success", true);
-
-        return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(response);
+        this.putWorkTimeService = putWorkTimeService;
     }
 
     // 근무시간 조회 (QueryPara(Input) -> Json(Return))
     @GetMapping("/{workDate}")
     public ResponseEntity<?> getWorkTimeControll(
             @PathVariable("workDate") LocalDate workDate,
-            HttpServletRequest sessionRequest) 
-        {
+            HttpServletRequest sessionRequest) {
 
         // 세션에서 사용자 정보 가져오기
         HttpSession session = sessionRequest.getSession(false);
 
-        LoginUserDto loginUserDto =(LoginUserDto)session.getAttribute("loginUser");
+        LoginUserDto loginUserDto = (LoginUserDto) session.getAttribute("loginUser");
 
         // 서비스 호출
-        List<WorkTimeRequestDto> results = GetMonthWorkTimeService.getWorkTime(workDate,loginUserDto);
+        List<WorkTimeRequestDto> results = GetMonthWorkTimeService.getWorkTime(workDate, loginUserDto);
         return ResponseEntity.ok(results);
+    }
+
+    // 근무시간 등록, 변경 (QueryPara(Input) -> Json(Return))
+    @PutMapping("/put/worktime")
+    public ResponseEntity<?> putWorkTimeControll(@RequestBody PutWorktimeRequestDto request,
+            HttpServletRequest sessionRequest) {
+
+        // 세션에서 사용자 정보 가져오기
+        HttpSession session = sessionRequest.getSession(false);
+
+        LoginUserDto loginUserDto = (LoginUserDto) session.getAttribute("loginUser");
+
+        try {
+            putWorkTimeService.UpdateWorkTime(request, loginUserDto);
+            // 성공
+            return ResponseEntity
+                    .status(HttpStatus.ACCEPTED).contentType(MediaType.APPLICATION_JSON)
+                    .body(Map.of(
+                            "success", true,
+                            "message", "근무시간이 성공적으로 등록되었습니다"));
+        } catch (DataAccessException e) {
+            // DB 처리 중 에러
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT).contentType(MediaType.APPLICATION_JSON)
+                    .body(Map.of(
+                            "success", false,
+                            "message", "등록 처리에 실패하였습니다. 관리자에게 문의해주세요."));
+        } catch (InvalidWorkTimeException e) {
+            // 시간 유효성 검사 에러
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON)
+                    .body(Map.of("success", false, "message", e.getMessage()));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).contentType(MediaType.APPLICATION_JSON)
+                    .body(Map.of("success", false, "message", "알 수 없는 오류가 발생했습니다."));
+        }
+
     }
 }

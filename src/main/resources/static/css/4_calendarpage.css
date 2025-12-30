@@ -1,0 +1,723 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family:
+    "Inter",
+    "Noto Sans KR",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+  background-color: #ffffff;
+  line-height: 1.5;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 100%;
+  max-width: 375px;
+  margin: 0 auto;
+  background-color: white;
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  border-left: none;
+  border-right: none;
+}
+
+/* Download Button */
+.download-button {
+  position: absolute;
+  right: 24px;
+  top: 20px;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 20;
+}
+
+/* Month Selector */
+.month-selector {
+  padding: 0 20px;
+  margin-top: 20px;
+  margin-bottom: 0;
+  position: relative;
+}
+
+.month-button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.month-text {
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+  letter-spacing: -0.4px;
+  line-height: 1.5;
+}
+
+.month-dropdown {
+  position: absolute;
+  left: 20px;
+  top: 40px;
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 30;
+  width: 160px;
+  max-height: 300px;
+  overflow-y: auto;
+  display: none;
+}
+
+.month-dropdown.visible {
+  display: block;
+}
+
+.month-dropdown-item {
+  width: 100%;
+  padding: 12px 16px;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  color: #000;
+  transition: background-color 0.2s;
+}
+
+.month-dropdown-item:hover {
+  background-color: #f5f5f5;
+}
+
+.month-dropdown-item.selected {
+  background-color: #eeeeee;
+}
+
+.dropdown-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: none;
+}
+
+.dropdown-backdrop.visible {
+  display: block;
+}
+
+/* Calendar */
+.calendar {
+  width: 100%;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  width: 100%;
+}
+
+.weekday {
+  background-color: white;
+  height: 85px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 12px;
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: #000;
+  line-height: 1.5;
+  letter-spacing: -0.25px;
+}
+
+.weekday.sunday {
+  color: #eb4335;
+}
+
+.weekday.saturday {
+  color: #4285f4;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  width: 100%;
+}
+
+.calendar-day {
+  height: 85px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding-top: 2px;
+  padding-left: 4px;
+  cursor: pointer;
+  position: relative;
+  background-color: white;
+  transition: background-color 0.2s;
+}
+
+.calendar-day:hover {
+  background-color: #f5f5f5;
+}
+
+.calendar-day.empty {
+  cursor: default;
+  pointer-events: none;
+}
+
+.calendar-day.selected {
+  background-color: #eeeeee;
+}
+
+.calendar-day.disabled {
+  cursor: default;
+  pointer-events: none;
+}
+
+.day-number {
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  color: #000;
+  line-height: 1.5;
+  letter-spacing: -0.25px;
+  margin-top: 0;
+}
+
+.calendar-day.sunday .day-number {
+  color: #eb4335;
+}
+
+.calendar-day.saturday .day-number {
+  color: #4285f4;
+}
+
+.calendar-day.holiday .day-number {
+  color: #eb4335;
+}
+
+.work-badge {
+  background-color: #88b3f8;
+  color: white;
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 0 2px;
+  height: 24px;
+  line-height: 24px;
+  border-radius: 4px;
+  margin-top: 8px;
+  letter-spacing: -0.25px;
+  width: calc(100% + 4px);
+  margin-left: -4px;
+  text-align: center;
+}
+
+.vacation-badge {
+  background-color: #ff9999;
+  color: white;
+  font-family: "Inter", sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 0 2px;
+  height: 24px;
+  line-height: 24px;
+  border-radius: 4px;
+  margin-top: 8px;
+  letter-spacing: -0.25px;
+  width: calc(100% + 4px);
+  margin-left: -4px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+/* Navigation Buttons */
+.nav-container {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 375px;
+  height: 56px;
+  z-index: 25;
+  padding-bottom: 20px;
+}
+
+.nav-wrapper {
+  position: relative;
+  width: 100%;
+  height: 56px;
+}
+
+/* Background bars */
+.bg-bar {
+  position: absolute;
+  background-color: #eeeeee;
+  height: 56px;
+  width: 125px;
+  top: 0;
+}
+
+.bg-bar-1 {
+  left: 0;
+}
+
+.bg-bar-2 {
+  left: 125px;
+}
+
+.bg-bar-3 {
+  left: 250px;
+}
+
+/* Calendar Icon Button */
+.calendar-icon-button {
+  position: absolute;
+  left: 13.33%;
+  right: 80.53%;
+  top: calc(50% - 5px);
+  transform: translateY(-50%);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.calendar-icon-button:hover {
+  opacity: 0.7;
+}
+
+.calendar-icon-button svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.calendar-icon-button svg path {
+  fill: #c7c7cc;
+  transition: fill 0.3s ease;
+}
+
+.calendar-icon-button.active svg path {
+  fill: #010101;
+}
+
+/* Profile Icon Button */
+.profile-icon-button {
+  position: absolute;
+  left: 79.47%;
+  right: 13.33%;
+  top: calc(50% - 5px);
+  transform: translateY(-50%);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.profile-icon-button:hover {
+  opacity: 0.7;
+}
+
+.profile-icon-button svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.profile-icon-button svg path {
+  fill: #c7c7cc;
+  transition: fill 0.3s ease;
+}
+
+.profile-icon-button.active svg path {
+  fill: #010101;
+}
+
+/* Main Button */
+.main-icon-button {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 70px;
+  top: -14px;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 50%;
+  background-color: #5a5a5a;
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
+  transition:
+    transform 0.2s,
+    background-color 0.3s ease;
+}
+
+.main-icon-button:hover {
+  transform: translateX(-50%) scale(1.05);
+}
+
+.main-icon-button.active {
+  background-color: #010101;
+}
+
+.main-button-circle-container {
+  display: none;
+}
+
+/* Main Icon */
+.main-icon {
+  position: absolute;
+  left: 50%;
+  top: calc(50% - 6px);
+  transform: translate(-50%, -50%);
+  width: 26px;
+  height: 24px;
+  pointer-events: none;
+}
+
+.main-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Labels */
+.label {
+  position: absolute;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: -0.1px;
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1.5;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  color: #c7c7cc;
+  transition: color 0.3s ease;
+}
+
+.calendar-label {
+  left: 62px;
+  top: 43.5px;
+}
+
+.profile-label {
+  left: 312.5px;
+  top: 43.5px;
+}
+
+.main-label {
+  left: 50%;
+  top: 39.5px;
+}
+
+.calendar-icon-button.active ~ .calendar-label {
+  color: #010101;
+}
+
+.profile-icon-button.active ~ .profile-label {
+  color: #010101;
+}
+
+.main-icon-button.active ~ .main-label {
+  color: white;
+}
+
+/* Hover effects */
+.calendar-icon-button:hover,
+.profile-icon-button:hover,
+.main-icon-button:hover {
+  opacity: 0.8;
+}
+
+/* Details Panel */
+.details-panel {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  max-width: 375px;
+  width: 100%;
+  background-color: white;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s ease-out;
+  z-index: 30;
+}
+
+.details-panel.visible {
+  transform: translateX(-50%) translateY(0);
+}
+
+.panel-header {
+  padding: 23px 24px 0;
+  position: relative;
+}
+
+.panel-date-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+  margin-bottom: 26px;
+}
+
+.panel-date-title {
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+  letter-spacing: -0.4px;
+  line-height: 1.5;
+}
+
+.panel-nav-button {
+  width: 3.668px;
+  height: 10.12px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.panel-work-hours {
+  display: inline-block;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.35px;
+  line-height: 1.5;
+  margin-top: 4px;
+}
+
+.panel-work-hours.work {
+  background-color: #88b3f8;
+}
+
+.panel-work-hours.vacation {
+  background-color: #ff9999;
+}
+
+.close-button {
+  position: absolute;
+  right: 24px;
+  top: 24px;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.panel-content {
+  padding: 0 24px 34px;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap-x: 40px;
+  gap-y: 21px;
+  margin-bottom: 34px;
+}
+
+.info-item {
+  grid-column: span 1;
+}
+
+.info-item.full-width {
+  grid-column: span 2;
+}
+
+.info-label {
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  color: #828282;
+  margin-bottom: 7px;
+  letter-spacing: -0.35px;
+  line-height: 1.5;
+}
+
+.info-value {
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  color: #000;
+  letter-spacing: -0.35px;
+  line-height: 1.5;
+}
+
+.edit-button {
+  width: 100%;
+  height: 40px;
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: -0.35px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.edit-button:hover {
+  background-color: #333;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 0;
+  color: #828282;
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  letter-spacing: -0.35px;
+  line-height: 1.5;
+}
+
+/* Edit Mode */
+.edit-mode {
+  display: none;
+  width: 100%;
+  max-width: 375px;
+  min-height: 100vh;
+  background-color: white;
+}
+
+.edit-mode.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  margin-bottom: 30px;
+}
+
+.back-button {
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-title {
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: #000;
+}
+
+.edit-form {
+  padding: 0 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  color: #828282;
+  margin-bottom: 8px;
+  letter-spacing: -0.35px;
+  line-height: 1.5;
+}
+
+.form-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  letter-spacing: -0.35px;
+}
+
+.form-select {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  letter-spacing: -0.35px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.form-textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 12px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-size: 14px;
+  letter-spacing: -0.35px;
+  resize: vertical;
+}
+
+.save-button {
+  width: 100%;
+  height: 48px;
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: "Inter", "Noto Sans KR", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: -0.4px;
+  cursor: pointer;
+  margin-top: 24px;
+  margin-bottom: 80px;
+}
+
+.save-button:hover {
+  background-color: #333;
+}
+
+.hidden {
+  display: none;
+}

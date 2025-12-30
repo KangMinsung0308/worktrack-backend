@@ -10,15 +10,210 @@
   border-radius: 8px;
   font-size: 14px;
   z-index: 1000;
-  animation: slideUp 0.3s ease-out;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  white-space: pre-line;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90%;
+}
 
-  white-space: nowrap;      /* 줄바꿈 완전 금지 */
-  overflow: hidden;         /* 넘친 글자 숨기기 */
-  text-overflow: ellipsis;  /* ... 처리 */
-  max-width: 90%;           /* 너무 길면 화면 밖으로 안 나가게 */
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-10px);
+}
+
+.toast.hide {
+  opacity: 0;
+  transform: translateX(-50%) translateY(0);
 }
 
 
-.toast.hide {
-  animation: slideDown 0.3s ease-out;
+
+.nav-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  background-color: white;
+}
+
+.nav-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 375px;
+  height: 56px;
+}
+
+.nav-bg-left {
+  position: absolute;
+  background-color: #eeeeee;
+  height: 56px;
+  left: 0;
+  top: 0;
+  width: 33.33%;
+}
+
+.nav-bg-center {
+  position: absolute;
+  background-color: #eeeeee;
+  height: 56px;
+  left: 33.33%;
+  top: 0;
+  width: 33.33%;
+}
+
+.nav-bg-right {
+  position: absolute;
+  background-color: #eeeeee;
+  height: 56px;
+  left: 66.66%;
+  top: 0;
+  width: 33.34%;
+}
+
+/* Profile Icon Button */
+.profile-icon-button {
+  position: absolute;
+  left: 79.47%;
+  right: 13.33%;
+  top: calc(50% - 5px);
+  transform: translateY(-50%);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.profile-icon-button:hover {
+  opacity: 0.7;
+}
+
+.profile-icon-button svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Calendar Icon Button */
+.calendar-icon-button {
+  position: absolute;
+  left: 13.33%;
+  right: 80.53%;
+  top: calc(50% - 5px);
+  transform: translateY(-50%);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.calendar-icon-button:hover {
+  opacity: 0.7;
+}
+
+.calendar-icon-button svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Main Button */
+.main-button-wrapper {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70px;
+  height: 70px;
+  top: -14px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.main-button-wrapper:hover {
+  transform: translateX(-50%) scale(1.05);
+}
+
+.main-button-circle-wrapper {
+  position: absolute;
+  inset: -30%;
+}
+
+.main-button-circle-wrapper svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Main Icon */
+.main-icon-wrapper {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 26px;
+  top: calc(50% - 12px);
+  pointer-events: none;
+}
+
+.main-icon-wrapper svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Labels */
+.nav-label-main {
+  position: absolute;
+  left: 50%;
+  top: 39.5px;
+  transform: translateX(-50%) translateY(-50%);
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  letter-spacing: -0.1px;
+  pointer-events: none;
+  line-height: 0;
+}
+
+.nav-label-main p {
+  line-height: 1.5;
+  white-space: pre;
+}
+
+.nav-label-profile {
+  position: absolute;
+  left: 83.33%;
+  top: 43.5px;
+  transform: translateX(-50%) translateY(-50%);
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  letter-spacing: -0.1px;
+  pointer-events: none;
+  line-height: 0;
+}
+
+.nav-label-profile p {
+  line-height: 1.5;
+  white-space: pre;
+}
+
+.nav-label-calendar {
+  position: absolute;
+  left: 16.67%;
+  top: 43.5px;
+  transform: translateX(-50%) translateY(-50%);
+  font-size: 10px;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+  letter-spacing: -0.1px;
+  pointer-events: none;
+  line-height: 0;
+}
+
+.nav-label-calendar p {
+  line-height: 1.5;
+  white-space: pre;
 }
