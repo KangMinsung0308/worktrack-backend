@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>근무시간 관리</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fugaz+One&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+            background: white;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        #app {
+            background: white;
+            border: 1px solid rgba(0,0,0,0);
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .content {
+            position: absolute;
+            height: 387px;
+            left: 50%;
+            top: calc(50% + 2.5px);
+            transform: translate(-50%, -50%);
+            width: 375px;
+            overflow: visible;
+        }
+
+        .logo {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            font-family: 'Fugaz One', sans-serif;
+            justify-content: center;
+            line-height: 0;
+            left: 187.5px;
+            font-style: normal;
+            font-size: 40px;
+            color: black;
+            text-align: center;
+            white-space: nowrap;
+            top: 30px;
+            letter-spacing: -0.4px;
+            transform: translate(-50%, -50%);
+        }
+
+        .logo p {
+            line-height: 1.5;
+            white-space: pre;
+        }
+
+        .copy {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            align-items: center;
+            line-height: 1.5;
+            left: 85px;
+            font-style: normal;
+            color: black;
+            text-align: center;
+            white-space: nowrap;
+            top: 84px;
+        }
+
+        .copy .title {
+            font-weight: 600;
+            position: relative;
+            font-size: 16px;
+        }
+
+        .copy .subtitle {
+            font-weight: 400;
+            position: relative;
+            font-size: 14px;
+        }
+
+        .label {
+            position: absolute;
+            font-weight: 400;
+            line-height: 1.5;
+            font-style: normal;
+            color: #828282;
+            font-size: 10px;
+            text-align: center;
+            white-space: nowrap;
+            transform: translateX(-50%);
+        }
+
+        .work-time-label {
+            left: 44px;
+            top: 154px;
+        }
+
+        .break-time-label {
+            left: 44px;
+            top: 243px;
+        }
+
+        .time-input {
+            position: absolute;
+            font-weight: 400;
+            line-height: 1.5;
+            font-style: normal;
+            font-size: 14px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            width: 70px;
+            transform: translateX(-50%);
+            font-family: 'Inter', sans-serif;
+            opacity: 0;
+            z-index: 2;
+        }
+
+        .time-input.gray {
+            color: #828282;
+        }
+
+        .time-input.black {
+            color: black;
+        }
+
+        .time-display {
+            position: absolute;
+            font-weight: 400;
+            line-height: 1.5;
+            font-style: normal;
+            font-size: 14px;
+            text-align: center;
+            cursor: pointer;
+            transform: translateX(-50%);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .time-display.gray {
+            color: #828282;
+        }
+
+        .time-display.black {
+            color: black;
+        }
+
+        .start-time {
+            left: 65px;
+            top: 178px;
+        }
+
+        .end-time {
+            right: 150px;
+            top: 178px;
+            left: auto;
+            transform: translateX(50%);
+        }
+
+        .separator {
+            position: absolute;
+            font-weight: 400;
+            line-height: 1.5;
+            left: 187.5px;
+            font-style: normal;
+            font-size: 14px;
+            color: black;
+            text-align: center;
+            white-space: nowrap;
+            top: 178px;
+            transform: translateX(-50%);
+        }
+
+        .break-time-container {
+            position: absolute;
+            left: 59.5px;
+            top: 260px;
+            transform: translateX(-50%);
+        }
+
+        .break-time-button {
+            font-weight: 400;
+            line-height: 1.4;
+            font-size: 14px;
+            text-align: left;
+            background: transparent;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .break-time-button.gray {
+            color: #828282;
+        }
+
+        .break-time-button.black {
+            color: black;
+        }
+
+        .dropdown {
+            position: absolute;
+            left: 187.5px;
+            top: 304px;
+            transform: translateX(-50%);
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            width: 315px;
+            padding: 12px 0;
+            display: none;
+            overflow: hidden;
+        }
+
+        .dropdown.open {
+            display: block;
+        }
+
+        .dropdown-item {
+            width: 100%;
+            padding: 16px 20px;
+            font-size: 14px;
+            color: #828282;
+            text-align: left;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-weight: 400;
+            line-height: 1.4;
+            transition: background-color 0.2s;
+        }
+
+        .dropdown-item:hover {
+            background: #F5F5F5;
+        }
+
+        .arrow-icon {
+            position: absolute;
+            display: flex;
+            height: 4.5px;
+            align-items: center;
+            justify-content: center;
+            left: 320px;
+            top: 262px;
+            width: 13px;
+            cursor: pointer;
+            z-index: 5;
+        }
+
+        .arrow-inner {
+            flex: none;
+            transition: transform 0.3s;
+        }
+
+        .arrow-inner.rotated {
+            transform: rotate(180deg);
+        }
+
+        .arrow-svg-container {
+            height: 4.5px;
+            position: relative;
+            width: 13px;
+        }
+
+        .button-container {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: flex-start;
+            left: 24px;
+            top: 347px;
+            width: 327px;
+            z-index: 1;
+        }
+
+        .start-button {
+            height: 40px;
+            position: relative;
+            border-radius: 8px;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .start-button.disabled {
+            background: #828282;
+            cursor: not-allowed;
+        }
+
+        .start-button.enabled {
+            background: black;
+        }
+
+        .button-content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .button-inner {
+            display: flex;
+            gap: 8px;
+            height: 40px;
+            align-items: center;
+            justify-content: center;
+            padding: 0 16px;
+            width: 100%;
+        }
+
+        .button-text {
+            display: flex;
+            flex-direction: column;
+            font-weight: 500;
+            justify-content: center;
+            line-height: 0;
+            font-style: normal;
+            font-size: 14px;
+            white-space: nowrap;
+            color: white;
+        }
+
+        .button-text p {
+            line-height: 1.4;
+            white-space: pre;
+        }
+
+        .divider {
+            position: absolute;
+            height: 1px;
+            pointer-events: none;
+        }
+
+        .divider-1 {
+            left: 201px;
+            top: 202px;
+            width: 148.5px;
+        }
+
+        .divider-2 {
+            left: calc(50% + 5px);
+            top: calc(50% + 91.5px);
+            transform: translate(-50%, -50%);
+            width: 315px;
+        }
+
+        .divider-3 {
+            left: calc(50% - 81.75px);
+            top: 202px;
+            transform: translateX(-50%);
+            width: 141.5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="content">
+            <div class="logo">
+                <p>T</p>
+            </div>
+
+            <div class="copy">
+                <p class="title">APPLE_Wistron</p>
+                <p class="subtitle">기준이 될 근무시간을 입력해주세요</p>
+            </div>
+
+            <p class="label work-time-label">근무 시간 </p>
+
+            <input type="time" id="startTime" class="time-input start-time gray" value="09:00">
+            <span id="startTimeDisplay" class="time-display start-time gray">09:00</span>
+            <p class="separator">-</p>
+            <input type="time" id="endTime" class="time-input end-time gray" value="18:00">
+            <span id="endTimeDisplay" class="time-display end-time gray">18:00</span>
+
+            <p class="label break-time-label">휴게 시간 </p>
+
+            <div class="break-time-container">
+                <button id="breakTimeButton" class="break-time-button gray">60분</button>
+            </div>
+
+            <div id="dropdown" class="dropdown">
+                <button class="dropdown-item" data-value="30">30분</button>
+                <button class="dropdown-item" data-value="45">45분</button>
+                <button class="dropdown-item" data-value="60">60분</button>
+                <button class="dropdown-item" data-value="90">90분</button>
+                <button class="dropdown-item" data-value="120">120분</button>
+            </div>
+
+            <div class="arrow-icon" id="arrowIcon">
+                <div class="arrow-inner rotated" id="arrowInner">
+                    <div class="arrow-svg-container">
+                        <svg style="display: block; width: 100%; height: 100%; position: absolute; inset: -22.22% -7.69%;" fill="none" preserveAspectRatio="none" viewBox="0 0 15 7">
+                            <path d="M1.00009 5.5L7.50009 1L14.0001 5.5" stroke="#828282" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-container">
+                <button id="startButton" class="start-button disabled">
+                    <div class="button-content">
+                        <div class="button-inner">
+                            <div class="button-text">
+                                <p>기록 시작 하기</p>
+                            </div>
+                        </div>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Dividers -->
+            <div class="divider divider-1">
+                <svg style="display: block; width: 100%; height: 100%; position: absolute; inset: -0.5px -0.34%;" fill="none" preserveAspectRatio="none" viewBox="0 0 150 1">
+                    <path d="M0.5 0.5H149" stroke="#E0E0E0" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </div>
+            <div class="divider divider-2">
+                <svg style="display: block; width: 100%; height: 100%; position: absolute; inset: -0.5px -0.16%;" fill="none" preserveAspectRatio="none" viewBox="0 0 316 1">
+                    <path d="M0.5 0.5H315.5" stroke="#E0E0E0" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </div>
+            <div class="divider divider-3">
+                <svg style="display: block; width: 100%; height: 100%; height: 100%; position: absolute; inset: -0.5px -0.35%;" fill="none" preserveAspectRatio="none" viewBox="0 0 143 1">
+                    <path d="M0.5 0.5H142" stroke="#E0E0E0" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State
+        let startTimeChanged = false;
+        let endTimeChanged = false;
+        let breakTimeChanged = false;
+        let breakTime = '60';
+
+        // Elements
+        const startTimeInput = document.getElementById('startTime');
+        const endTimeInput = document.getElementById('endTime');
+        const breakTimeButton = document.getElementById('breakTimeButton');
+        const dropdown = document.getElementById('dropdown');
+        const arrowIcon = document.getElementById('arrowIcon');
+        const arrowInner = document.getElementById('arrowInner');
+        const startButton = document.getElementById('startButton');
+        const dropdownItems = document.querySelectorAll('.dropdown-item');
+        const startTimeDisplay = document.getElementById('startTimeDisplay');
+        const endTimeDisplay = document.getElementById('endTimeDisplay');
+
+        // Check if form is complete
+        function updateButtonState() {
+            if (startTimeChanged && endTimeChanged && breakTimeChanged) {
+                startButton.classList.remove('disabled');
+                startButton.classList.add('enabled');
+            } else {
+                startButton.classList.remove('enabled');
+                startButton.classList.add('disabled');
+            }
+        }
+
+        // Start time change
+        startTimeInput.addEventListener('change', function() {
+            startTimeChanged = true;
+            startTimeInput.classList.remove('gray');
+            startTimeInput.classList.add('black');
+            startTimeDisplay.textContent = startTimeInput.value;
+            startTimeDisplay.classList.remove('gray');
+            startTimeDisplay.classList.add('black');
+            updateButtonState();
+        });
+
+        // End time change
+        endTimeInput.addEventListener('change', function() {
+            endTimeChanged = true;
+            endTimeInput.classList.remove('gray');
+            endTimeInput.classList.add('black');
+            endTimeDisplay.textContent = endTimeInput.value;
+            endTimeDisplay.classList.remove('gray');
+            endTimeDisplay.classList.add('black');
+            updateButtonState();
+        });
+
+        // Break time button click
+        breakTimeButton.addEventListener('click', function() {
+            dropdown.classList.toggle('open');
+            arrowInner.classList.toggle('rotated');
+        });
+
+        // Arrow icon click
+        arrowIcon.addEventListener('click', function() {
+            dropdown.classList.toggle('open');
+            arrowInner.classList.toggle('rotated');
+        });
+
+        // Dropdown item selection
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', function() {
+                breakTime = this.getAttribute('data-value');
+                breakTimeButton.textContent = this.textContent;
+                breakTimeChanged = true;
+                breakTimeButton.classList.remove('gray');
+                breakTimeButton.classList.add('black');
+                dropdown.classList.remove('open');
+                arrowInner.classList.add('rotated');
+                updateButtonState();
+            });
+        });
+
+        // Start button click
+        startButton.addEventListener('click', function() {
+            if (startTimeChanged && endTimeChanged && breakTimeChanged) {
+                // 나중에 메인 페이지로 이동하는 로직이 추가될 예정
+                console.log('Start recording:', {
+                    startTime: startTimeInput.value,
+                    endTime: endTimeInput.value,
+                    breakTime: breakTime
+                });
+            }
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.break-time-container') && 
+                !event.target.closest('.arrow-icon') &&
+                !event.target.closest('#dropdown')) {
+                dropdown.classList.remove('open');
+                arrowInner.classList.add('rotated');
+            }
+        });
+    </script>
+</body>
+</html>

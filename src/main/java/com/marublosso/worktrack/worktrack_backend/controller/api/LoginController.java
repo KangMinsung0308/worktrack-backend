@@ -7,19 +7,18 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import com.marublosso.worktrack.worktrack_backend.dto.LoginRequestDto;
-import com.marublosso.worktrack.worktrack_backend.entity.User;
-import com.marublosso.worktrack.worktrack_backend.dto.LoginUserDto;
-import com.marublosso.worktrack.worktrack_backend.service.biz.java.features.LoginService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.marublosso.worktrack.worktrack_backend.dto.LoginRequestDto;
+import com.marublosso.worktrack.worktrack_backend.dto.LoginUserDto;
+import com.marublosso.worktrack.worktrack_backend.service.biz.java.features.LoginService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping("/worktrack")
+@RequestMapping("/api")
 public class LoginController {
 
     private final LoginService loginService;
@@ -28,25 +27,21 @@ public class LoginController {
         this.loginService = loginService;
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request) {
         Map<String, Object> response = new HashMap<>();
 
         LoginUserDto loginUserDto = loginService.login(loginRequestDto);
         if (loginUserDto != null) {
-            request.getSession(true).setAttribute("loginUser", loginUserDto);
+            HttpSession session = request.getSession(true);
+            session.setAttribute("loginUser", loginUserDto);
+            session.setAttribute("Session_Online", true);
+
             response.put("success", true);
-            response.put("redirectUrl", "/worktrack");
-            return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(response);
+            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
         } else {
             response.put("success", false);
-            response.put("message", "로그인 실패");
-            response.put("redirectUrl", "/worktrack/login");
-            return ResponseEntity.ok()
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .body(response);
+            return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
         }
     }
 
@@ -59,8 +54,6 @@ public class LoginController {
         }
 
         response.put("success", true);
-        return ResponseEntity.ok()
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(response);    
-    }
+        return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
+    }    
 }

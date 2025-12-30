@@ -9,8 +9,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.marublosso.worktrack.worktrack_backend.dto.WorkTimeRequestDto;
-import com.marublosso.worktrack.worktrack_backend.repository.WorkTimeRepository;
+import com.marublosso.worktrack.worktrack_backend.entity.AttendanceEntity;
 import com.marublosso.worktrack.worktrack_backend.repository.mapper.workTimeMapper.WorkTimeRowMapper;
+import com.marublosso.worktrack.worktrack_backend.repository.repo.WorkTimeRepository;
 
 @Repository
 public class WorkTimeRepositoryImpl implements WorkTimeRepository {
@@ -75,4 +76,72 @@ public class WorkTimeRepositoryImpl implements WorkTimeRepository {
 
 		return jdbcTemplate.query(sql, new WorkTimeRowMapper(), userId, firstDay, lastDay);
 	}
+
+	@Override
+	public void updateWorkTime(AttendanceEntity attendanceEntity) {
+
+		// 1. SQL문 작성
+		String sql = 
+				"UPDATE worktrack_db.ATTENDANCE " +
+				" 	SET start_time = ?, " +
+				"   	end_time = ?, " +
+				"   	total_hours = ?, " +
+				" 		overtime = ?, " +
+				" 		work_type = ?, " +
+				" 		bikou = ?, " +
+				" 		updated_at = ? " +
+				" WHERE attendance_id = ( " +
+				"	SELECT attendance_id  " +
+				" 		FROM worktrack_db.attendance " +
+				" 		WHERE user_id = ? AND work_date = ? " +
+				"		ORDER BY attendance_id DESC " +
+				" 		LIMIT 1 ); ";
+
+		jdbcTemplate.update(sql,
+				attendanceEntity.getStart_time(),
+				attendanceEntity.getEnd_time(),
+				attendanceEntity.getTotal_hours(),
+				attendanceEntity.getOvertime(),
+				attendanceEntity.getWork_type(),
+				attendanceEntity.getBikou(),
+				attendanceEntity.getUpdated_at(),
+				attendanceEntity.getUser_id(),
+				attendanceEntity.getWork_date());
+
+	}
+
+	@Override
+public void upsertWorkTime(AttendanceEntity attendanceEntity) {
+
+    String sql =
+        "INSERT INTO worktrack_db.ATTENDANCE " +
+        "(user_id, work_date, start_time, end_time, total_hours, overtime, created_at, updated_at, bikou, work_type) " +
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+        "ON DUPLICATE KEY UPDATE " +
+        "start_time = VALUES(start_time), " +
+        "end_time = VALUES(end_time), " +
+        "total_hours = VALUES(total_hours), " +
+        "overtime = VALUES(overtime), " +
+        "work_type = VALUES(work_type), " +
+        "bikou = VALUES(bikou), " +
+        "updated_at = VALUES(updated_at)";
+
+    Timestamp now = Timestamp.valueOf(LocalDateTime.now());
+
+    jdbcTemplate.update(
+        sql,
+        attendanceEntity.getUser_id(),
+        attendanceEntity.getWork_date(),
+        attendanceEntity.getStart_time(),
+        attendanceEntity.getEnd_time(),
+        attendanceEntity.getTotal_hours(),
+        attendanceEntity.getOvertime(),
+        now,   // created_at
+        now,   // updated_at
+        attendanceEntity.getBikou(),
+        attendanceEntity.getWork_type()
+    );
+}
+
+
 }

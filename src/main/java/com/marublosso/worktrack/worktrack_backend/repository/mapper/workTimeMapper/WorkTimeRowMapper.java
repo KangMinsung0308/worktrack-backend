@@ -17,6 +17,7 @@ public class WorkTimeRowMapper implements RowMapper<WorkTimeRequestDto> {
         dto.setTotalHours(rs.getDouble("total_hours"));
         dto.setOvertime(rs.getDouble("overtime"));
         dto.setBikou(rs.getString("bikou"));
+        dto.setWorkType(rs.getLong("work_type"));
         return dto;
     }
 }

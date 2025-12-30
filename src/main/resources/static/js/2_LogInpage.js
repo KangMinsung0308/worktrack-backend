@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const saveBtn = document.getElementById("saveData");
     const emailInput = document.getElementById("emailInput");
     const passwordInput = document.getElementById("passwordInput");
+    const go_to_signup_page = document.getElementById("go_signup_page");
 
     // 로그인 버튼 클릭 이벤트
     saveBtn.addEventListener("click", handleLogin);
@@ -19,20 +20,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Toast 메시지 함수
-    function showToast(message) {
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.textContent = message;
-        document.body.appendChild(toast);
-
-        setTimeout(() => {
-            toast.classList.add('hide');
-            setTimeout(() => {
-                document.body.removeChild(toast);
-            }, 300);
-        }, 2000);
-    }
+    //  회원가입 이동
+    go_to_signup_page.addEventListener("click", () => {
+        window.location.href = URL_CREATE_ACOUNT;
+    });
 
     // 실제 로그인 처리 함수
     async function handleLogin() {
@@ -47,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
         showToast("로그인 중...");
 
         try {
-            const res = await fetch("http://localhost:8080/worktrack/login", {
+            const res = await fetch(API_URL_LOGIN, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ username: email, password: password })
@@ -56,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const result = await res.json();
 
             if (result.success) {
-                window.location.href = result.redirectUrl;
+                window.location.href = "/";
             } else {
                 showToast(result.message);
             }

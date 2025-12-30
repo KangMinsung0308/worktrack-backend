@@ -1,103 +1,214 @@
 <!doctype html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-    />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>근무 관리</title>
+    <title>캘린더</title>
     <link rel="stylesheet" href="/css/common.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="/css/3_mainpage.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fugaz+One&family=Inter:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="stylesheet" href="/css/4_calendarpage.css" />
   </head>
   <body>
     <div class="container">
-      <!-- Logo -->
-      <div class="logo-section">
-        <div class="logo-text">T</div>
-        <div class="company-info">
-          <p class="company-name" th:text="${genBa}"></p>
-          <p class="user-name" th:text="${userName}"></p>
-          <p class="company-message">오늘 근무도 화이팅!</p>
+      <!-- Main View -->
+      <div id="mainView">
+        <!-- Download Button -->
+        <button class="download-button" onclick="handleDownload()">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <rect width="24" height="24" fill="white" />
+            <path
+              d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M7 10L12 15M12 15L17 10M12 15V3"
+              stroke="#828282"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </button>
+
+        <!-- Month Selector -->
+        <div class="month-selector">
+          <button
+            class="month-button"
+            id="monthButton"
+            onclick="toggleDropdown()"
+          >
+            <span class="month-text" id="monthText"></span>
+            <svg width="15" height="7" viewBox="0 0 15 7" fill="none">
+              <path
+                d="M1 1L7.5 6L14 1"
+                stroke="#828282"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
+
+          <div
+            class="dropdown-backdrop"
+            id="dropdownBackdrop"
+            onclick="closeDropdown()"
+          ></div>
+          <div class="month-dropdown" id="monthDropdown">
+            <!-- Dropdown items will be populated by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Calendar -->
+        <div class="calendar">
+          <!-- Weekdays -->
+          <div class="calendar-weekdays">
+            <div class="weekday sunday">일</div>
+            <div class="weekday">월</div>
+            <div class="weekday">화</div>
+            <div class="weekday">수</div>
+            <div class="weekday">목</div>
+            <div class="weekday">금</div>
+            <div class="weekday saturday">토</div>
+          </div>
+
+          <!-- Calendar Grid -->
+          <div class="calendar-grid" id="calendarGrid">
+            <!-- Days will be populated by JavaScript -->
+          </div>
         </div>
       </div>
 
-      <!-- Main Form -->
-      <div class="form-container">
-        <!-- Date Field -->
-        <div class="form-box">
-          <div style="margin-bottom: 16px">
-            <label class="form-label">근무 날짜(수정 가능)</label>
-            <div class="date-picker-wrapper">
-              <button class="date-button" id="dateButton">
-                <span id="dateText"></span>
-                <svg
-                  class="arrow-icon"
-                  fill="none"
-                  preserveAspectRatio="none"
-                  viewBox="0 0 15 7"
-                >
-                  <path
-                    d="M1.00009 5.5L7.50009 1L14.0001 5.5"
-                    stroke="#828282"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                  />
-                </svg>
-              </button>
-              <div class="date-picker-dropdown" id="datePicker">
-                <input type="date" class="date-input" id="dateInput" />
-              </div>
-            </div>
-          </div>
-
-          <div class="divider"></div>
-
-          <!-- Time Fields -->
-          <div class="time-fields">
-            <div class="time-field">
-              <label class="form-label">출근 시간</label>
-              <input
-                type="time"
-                class="time-input"
-                id="startTime"
-                value="09:00"
+      <!-- Edit Mode -->
+      <div id="editView" class="edit-mode">
+        <div class="edit-header">
+          <button class="back-button" onclick="handleBackFromEdit()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path
+                d="M13 7H1M1 7L7 1M1 7L7 13"
+                stroke="black"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
               />
-            </div>
-            <div class="time-field">
-              <label class="form-label">퇴근 시간</label>
-              <input
-                type="time"
-                class="time-input"
-                id="endTime"
-                value="18:00"
-              />
-            </div>
-          </div>
+            </svg>
+          </button>
+          <p class="edit-title" id="editDateTitle">11.10 (월)</p>
+          <div style="width: 24px"></div>
         </div>
 
-        <!-- Half Day Toggle -->
-        <div class="half-day-box">
-          <p class="half-day-label">반차 사용</p>
-          <div class="toggle-button" id="toggleButton">
-            <div class="toggle-bg" id="toggleBg"></div>
-            <div class="toggle-circle" id="toggleCircle"></div>
+        <div class="edit-form">
+          <div class="form-group">
+            <label class="form-label">근무 (휴가)</label>
+            <select
+              class="form-select"
+              id="vacationType"
+              onchange="handleVacationTypeChange()"
+            >
+      <option value="0">출근</option>
+      <option value="1">휴가</option>
+      <option value="2">반차</option>
+      <option value="3">대휴</option>
+            </select>
           </div>
+
+          <div class="form-group" id="startTimeGroup">
+            <label class="form-label">시작 시간</label>
+            <input
+              type="time"
+              class="form-input"
+              id="startTime"
+              value="09:00"
+            />
+          </div>
+
+          <div class="form-group" id="endTimeGroup">
+            <label class="form-label">종료 시간</label>
+            <input type="time" class="form-input" id="endTime" value="15:30" />
+          </div>
+
+          <div class="form-group" id="breakTimeGroup">
+            <label class="form-label">휴게 시간 (분)</label>
+            <input type="number" class="form-input" id="breakTime" value="60" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">메모</label>
+            <textarea
+              class="form-textarea"
+              id="memo"
+              placeholder="메모를 입력하세요"
+            >
+병원 예약 때문에 일찍 퇴근함</textarea
+            >
+          </div>
+
+          <button class="save-button" onclick="handleSave()">저장하기</button>
+        </div>
+      </div>
+
+      <!-- Details Panel -->
+      <div id="detailsPanel" class="details-panel">
+        <div class="panel-header">
+          <div class="panel-date-nav">
+            <button class="panel-nav-button" onclick="handlePrevDate()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M15 18L9 12L15 6"
+                  stroke="#000"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <div style="text-align: center">
+              <p class="panel-date-title" id="panelDateTitle">11.10 (월)</p>
+              <span class="panel-work-hours" id="panelWorkHours">5H 30M</span>
+            </div>
+            <button class="panel-nav-button" onclick="handleNextDate()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M9 18L15 12L9 6"
+                  stroke="#000"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+          </div>
+          <button class="close-button" onclick="closePanel()">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M18 6L6 18M6 6L18 18"
+                stroke="#828282"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </button>
         </div>
 
-        <!-- Submit Button -->
-        <button class="submit-button" id="submitButton">추가</button>
+        <div class="panel-content">
+          <div class="info-grid">
+            <div class="info-item">
+              <div class="info-label"></div>
+              <div class="info-value" id="workTimeValue"></div>
+            </div>
+            <div class="info-item">
+              <div class="info-label"></div>
+              <div class="info-value" id="breakTimeValue"></div>
+            </div>
+            <div class="info-item full-width">
+              <div class="info-label"></div>
+              <div class="info-value" id="memoValue"></div>
+            </div>
+          </div>
 
-        <!-- Navigation Buttons -->
-        <div class="nav-container">
+          <button class="edit-button" onclick="handleEdit()">수정하기</button>
+        </div>
+      </div>
+    </div>
+
+  <div class="nav-container">
           <div class="nav-wrapper">
             <div class="nav-bg-left"></div>
             <div class="nav-bg-center"></div>
@@ -205,14 +316,11 @@
             </div>
           </div>
         </div>
-      </div>
     </div>
 
-    <div class="toast" id="toast"></div>
-
     <script src="/js/URL.js"></script>
-    <script src="/js/MESSAGE.js"></script>
+      <script src="/js/MESSAGE.js"></script>
     <script src="/js/common.js"></script>
-    <script src="/js/3_mainpage.js"></script>
+    <script src="/js/4_calendarpage.js"></script>
   </body>
 </html>

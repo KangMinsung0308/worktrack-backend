@@ -4,6 +4,21 @@
   box-sizing: border-box;
 }
 
+ /*IOS 날짜 입력 스타일 초기화*/
+.time-input {
+  width: 100%;
+  font-size: 14px;
+  color: black;
+  border: none;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 4px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  background: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 body {
   font-family: "Inter", "Noto Sans KR", sans-serif;
   background-color: #ffffff;
