@@ -3,6 +3,8 @@ package com.marublosso.worktrack.worktrack_backend.service.biz.java.features;
 import com.marublosso.worktrack.worktrack_backend.dto.SignUpRequestDto;
 import com.marublosso.worktrack.worktrack_backend.entity.User;
 import com.marublosso.worktrack.worktrack_backend.repository.repo.LoginRepository;
+import com.marublosso.worktrack.worktrack_backend.service.biz.java.util.checktools.IsVaildEmail;
+import com.marublosso.worktrack.worktrack_backend.exception.InvalidFormatException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,22 +13,32 @@ import org.springframework.transaction.annotation.Transactional;
 public class SignUpService {
 
     private final LoginRepository loginRepository;
+    private final IsVaildEmail isVaildEmail;
+    
 
-    public SignUpService(LoginRepository loginRepository) {
+    public SignUpService(LoginRepository loginRepository, IsVaildEmail isVaildEmail) {
         this.loginRepository = loginRepository;
+        this.isVaildEmail = isVaildEmail;
     }
 
     /******************************************************************
      * 중복 이메일인지 체크한다.
      * 
      * @param signUpRequestDto 컨트롤러에서 받아온 비밀번호
-     * @exception 에러 에러 처리 안함  (미구현)
+     * @InvalidFormatException 이메일 형식이 올바르지 않을경우 예외 발생
      * 
      */
-    public Boolean SignUpAccountCheck(SignUpRequestDto signUpRequestDto) {
+    public boolean SignUpAccountCheck(SignUpRequestDto signUpRequestDto) {
+
+        String email = signUpRequestDto.getUserEmail();
+
+        // 이메일 형식 체크
+        if(!isVaildEmail.isVaildEmail(email)){
+            throw new InvalidFormatException("올바르지 않은 이메일입니다: " + email );
+        }
 
         User user = User.builder()
-                .username(signUpRequestDto.getUserEmail())
+                .username(email)
                 .build();
 
         // 존재하는 유저 인지 체크
