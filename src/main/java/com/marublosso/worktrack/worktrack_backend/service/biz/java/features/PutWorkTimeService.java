@@ -73,12 +73,7 @@ public class PutWorkTimeService {
         }
 
         if (request.getWorkType() == 2) { // 반차인 경우
-            // 근무시간이 4시간 초과인지 체크
-            double workHours = TimeCalculator.calculateOnlyWorkTime(request.getStartTime(), request.getEndTime(),
-                    request.getYasumiTime());
-            if (workHours > 4.0) {
-                throw new InvalidWorkTimeException("반차로 설정된 경우, 근무시간은 4시간 이하여야 합니다.");
-            }
+            // 처리 없음
         }
     }
 
