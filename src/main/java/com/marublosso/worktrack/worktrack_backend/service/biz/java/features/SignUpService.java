@@ -1,7 +1,7 @@
 package com.marublosso.worktrack.worktrack_backend.service.biz.java.features;
 
 import com.marublosso.worktrack.worktrack_backend.dto.SignUpRequestDto;
-import com.marublosso.worktrack.worktrack_backend.entity.User;
+import com.marublosso.worktrack.worktrack_backend.entity.user_authEntity;
 import com.marublosso.worktrack.worktrack_backend.repository.repo.LoginRepository;
 import com.marublosso.worktrack.worktrack_backend.service.biz.java.util.checktools.IsVaildEmail;
 import com.marublosso.worktrack.worktrack_backend.exception.InvalidFormatException;
@@ -37,8 +37,8 @@ public class SignUpService {
             throw new InvalidFormatException("올바르지 않은 이메일입니다: " + email );
         }
 
-        User user = User.builder()
-                .username(email)
+        user_authEntity user = user_authEntity.builder()
+                .email(email)
                 .build();
 
         // 존재하는 유저 인지 체크
@@ -64,12 +64,9 @@ public class SignUpService {
     @Transactional
     public void SignUp(String email, SignUpRequestDto signUpRequestDto) {
 
-        User user = User.builder()
-                .username(email)
+        user_authEntity user = user_authEntity.builder()
+                .email(email)
                 .password_hash(signUpRequestDto.getPassword())
-                .name("미설정")
-                .dept("현장 미등록") // TODO : 어썸한 다른 디폴트 멘트를 구상해야함
-                .role("USER") // 일반유저
                 .build();
 
         // DB에 유저 정보 등록

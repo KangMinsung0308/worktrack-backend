@@ -3,8 +3,7 @@ package com.marublosso.worktrack.worktrack_backend.repository.impl;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import com.marublosso.worktrack.worktrack_backend.entity.User;
-import com.marublosso.worktrack.worktrack_backend.repository.mapper.loginMapper.SearchAcountOnlyInfoMapper;
+import com.marublosso.worktrack.worktrack_backend.entity.user_authEntity;
 import com.marublosso.worktrack.worktrack_backend.repository.mapper.loginMapper.UserRowMapper;
 import com.marublosso.worktrack.worktrack_backend.repository.repo.LoginRepository;
 
@@ -18,12 +17,12 @@ public class LoginRepositorylmpl implements LoginRepository {
     }
 
     @Override
-    public User SearchUserInfo(User user) {
+    public user_authEntity SearchUserInfo(user_authEntity user) {
 
-        String sql = " SELECT user_id , username , password_hash, name, dept, role " +
-                " from worktrack_db.USERS " +
-                " Where username = ? and password_hash  = ? ";
-        Object[] params = new Object[] { user.getUsername(), user.getPassword_hash() };
+        String sql = " SELECT id , email , password_hash " +
+                " from worktrack_db.user_auth " +
+                " Where email = ? and password_hash  = ? ";
+        Object[] params = new Object[] { user.getEmail(), user.getPassword_hash() };
 
         try {
             return jdbcTemplate.queryForObject(sql, new UserRowMapper(), params);
@@ -33,11 +32,11 @@ public class LoginRepositorylmpl implements LoginRepository {
     }
 
     @Override
-    public int SearchAcountOnlyInfo(User user) {
-        String sql = " SELECT Count(username) " +
-                " from worktrack_db.USERS " +
-                " Where username = ? ";
-        Object[] params = new Object[] { user.getUsername() };
+    public int SearchAcountOnlyInfo(user_authEntity user) {
+        String sql = " SELECT Count(email) " +
+                " from worktrack_db.user_auth " +
+                " Where email = ? ";
+        Object[] params = new Object[] { user.getEmail() };
 
         Integer count = jdbcTemplate.queryForObject(
                 sql,
@@ -49,18 +48,16 @@ public class LoginRepositorylmpl implements LoginRepository {
     }
 
     @Override
-    public void InsertNewUser(User user) {
+    public void InsertNewUser(user_authEntity user) {
         // 1. SQL문 작성
-        String sql = "INSERT INTO worktrack_db.USERS " +
-                " (username , password_hash, name, dept, role) " +
-                "VALUES (?, ?, ?, ?, ?) ";
+        String sql = "INSERT INTO worktrack_db.user_auth " +
+                " (email , password_hash) " +
+                "VALUES (?, ?) ";
 
         jdbcTemplate.update(sql,
-                user.getUsername(),
-                user.getPassword_hash(),
-                user.getName(),
-                user.getDept(),
-                user.getRole());
+                user.getEmail(),
+                user.getPassword_hash()
+        );
 
     }
 

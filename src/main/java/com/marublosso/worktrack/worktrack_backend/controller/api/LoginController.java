@@ -41,6 +41,7 @@ public class LoginController {
             return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
         } else {
             response.put("success", false);
+            response.put("message", "아이디 또는 비밀번호가 올바르지 않습니다.");
             return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON).body(response);
         }
     }
