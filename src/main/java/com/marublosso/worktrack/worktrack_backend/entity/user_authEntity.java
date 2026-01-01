@@ -10,14 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor // 기본 생성자
 @AllArgsConstructor // 전체 필드 생성자
 
-public class User {
+public class user_authEntity {
 
-    private Long user_id;
-    private String username;
+    private Long id;
+    private String email;
     private String password_hash;
-    private String name;
-    private String dept;
-    private String role;
     private String created_at;
     private String updated_at;
 

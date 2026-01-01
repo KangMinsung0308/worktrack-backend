@@ -1,7 +1,7 @@
 package com.marublosso.worktrack.worktrack_backend.service.biz.java.features;
 
 import com.marublosso.worktrack.worktrack_backend.dto.LoginUserDto;
-import com.marublosso.worktrack.worktrack_backend.entity.User;
+import com.marublosso.worktrack.worktrack_backend.entity.user_authEntity;
 import com.marublosso.worktrack.worktrack_backend.repository.repo.LoginRepository;
 
 import org.springframework.stereotype.Service;
@@ -25,13 +25,13 @@ public class LoginService {
         // TODO : 유효성 검사 
 
         // DTO -> Entity 변환
-        User user = User.builder()
-                .username(userRequestDto.getUsername())
+        user_authEntity user = user_authEntity.builder()
+                .email(userRequestDto.getUsername())
                 .password_hash(userRequestDto.getPassword())
                 .build();
 
         // 유저 정보 조회
-        User foundUser = loginRepository.SearchUserInfo(user);
+        user_authEntity foundUser = loginRepository.SearchUserInfo(user);
 
         // 로그인 실패
         if (foundUser == null) {
