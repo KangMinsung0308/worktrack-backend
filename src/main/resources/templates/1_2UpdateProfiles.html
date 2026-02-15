@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>프로필 설정</title>
+  <link rel="stylesheet" href="/css/common.css" />
+  <link rel="stylesheet" href="/css/page/1_2UpdateProfiles.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Fugaz+One&family=Inter:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&display=swap"
+    rel="stylesheet">
+
+</head>
+
+<body>
+  <div class="container">
+    <div class="content-inner">
+
+      <div class="logo">T</div>
+      <div class="main-title">프로필 설정</div>
+
+      <!-- =====================
+           STEP 1 : Profile
+           ===================== -->
+      <section class="section">
+        <div class="section-header">
+          <div class="section-step">STEP 1</div>
+          <div class="section-title">이름 등록</div>
+          <div class="section-desc">사용할 이름을 입력해주세요</div>
+        </div>
+
+        <div class="input-button-group">
+          <div class="field-wrapper">
+            <input type="text" id="nameInput" class="field" placeholder="이름을 입력해주세요" />
+            <div class="error-message" id="nameError"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================
+           STEP 2 : Work Place
+           ===================== -->
+      <section class="section">
+        <div class="section-header">
+          <div class="section-step">STEP 2</div>
+          <div class="section-title">근무지 등록</div>
+          <div class="section-desc">현장 근무지를 입력해주세요</div>
+        </div>
+
+        <div class="input-button-group">
+          <div class="field-wrapper">
+            <input type="text" id="deptInput" class="field" placeholder="근무지를 입력해주세요" />
+            <div class="error-message" id="deptError"></div>
+          </div>
+
+          <button class="button" id="submitButton">등록 하기</button>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+    <script src="/js/URL.js"></script>
+    <script src="/js/MESSAGE.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/page/1_2UpdateProfiles.js"></script>
+
+</body>
+
+</html>

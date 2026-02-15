@@ -29,7 +29,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        boolean isOnline = session != null
+        boolean isOnline = session != null  
                 && Boolean.TRUE.equals(session.getAttribute("Session_Online"));
 
         if (!isOnline) {

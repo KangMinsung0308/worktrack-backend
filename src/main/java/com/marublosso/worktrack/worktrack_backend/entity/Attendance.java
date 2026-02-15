@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class AttendanceEntity {
+public class Attendance {
 
     private Long attendance_id;
     private Long user_id;
@@ -23,6 +23,7 @@ public class AttendanceEntity {
     private Double overtime;
     private Long work_type;
     private String bikou;
+    private Double yasumi_time;
     private LocalDateTime created_at;
     private LocalDateTime updated_at;
 

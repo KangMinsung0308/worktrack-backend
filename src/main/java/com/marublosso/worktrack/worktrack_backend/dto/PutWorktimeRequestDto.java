@@ -12,7 +12,7 @@ public class PutWorktimeRequestDto {
     private LocalDate workDate;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
-    private Double YasumiTime;
+    private Double yasumiTime;
     private Long workType;
     private String bikou;
 }
