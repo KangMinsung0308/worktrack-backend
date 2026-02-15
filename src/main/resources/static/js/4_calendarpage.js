@@ -86,6 +86,7 @@ function funcWorkDate(year, month) {
           startTime: item.startTime ?? null,
           endTime: item.endTime ?? null,
           totalHours: item.totalHours ?? null,
+          yasumiTime: item.yasumiTime ?? null,
           memo: item.bikou ?? "",
         };
       });
@@ -165,7 +166,7 @@ function closeDropdown() {
 function handleMonthSelect(year, month) {
   currentYear = year;
   currentMonth = month;
-  selectedDate = null; // ✅ 중요
+  selectedDate = null; 
   isPanelVisible = false;
 
   closeDropdown();
@@ -202,7 +203,7 @@ function renderCalendar() {
     cell.className = "calendar-day";
     if (dow === 0) cell.classList.add("sunday");
     if (dow === 6) cell.classList.add("saturday");
-    if (day === selectedDate) cell.classList.add("selected"); // ✅ 조건 단순화
+    if (day === selectedDate) cell.classList.add("selected"); 
 
     cell.innerHTML = `<div class="day-number">${day}</div>`;
 
@@ -281,12 +282,12 @@ function updatePanel() {
     // 일반 근무: 모든 정보 표시
     infoGrid.innerHTML = `
       <div class="info-item">
-        <div class="info-label">근무 정보</div>
-        <div class="info-value">${formatHours(dayData.totalHours)}</div>
+        <div class="info-label">근무 시간</div>
+        <div class="info-value">${dayData.startTime.slice(11, 16)+" ~ "+dayData.endTime.slice(11,16)}</div>
       </div>
       <div class="info-item">
         <div class="info-label">휴게 시간</div>
-        <div class="info-value">${dayData.YasumiTime ?? "없음"}</div>
+        <div class="info-value">${dayData.yasumiTime?? "0"}분</div>
       </div>
       <div class="info-item full-width">
         <div class="info-label">메모</div>
@@ -377,7 +378,7 @@ function handleEdit() {
   }
 
   // 기존 값 세팅
-  document.getElementById("breakTime").value = data.YasumiTime ?? "60";
+  document.getElementById("breakTime").value = data.yasumiTime ?? "60";
   document.getElementById("startTime").value = data.startTime?.substring(11, 16) ?? "";
   document.getElementById("endTime").value =data.endTime?.substring(11, 16) ?? "";
   document.getElementById("memo").value = data.memo ?? "";
@@ -401,7 +402,7 @@ function handleSave() {
     workDate: key,
     startTime: startTimeValue ? `${key}T${startTimeValue}:00` : null,
     endTime: endTimeValue ? `${key}T${endTimeValue}:00` : null,
-    YasumiTime: document.getElementById("breakTime").value,
+    yasumiTime: document.getElementById("breakTime").value,
     bikou: document.getElementById("memo").value,
     workType: document.getElementById("vacationType").value || 0,
   };
