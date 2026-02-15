@@ -12,6 +12,7 @@ public class WorkTimeRequestDto {
     private LocalDateTime endTime;
     private Double totalHours;
     private Double overtime;
+    private Double yasumiTime;
     private Long workType;
     private String bikou;
     private boolean isHalfDay;

@@ -9,16 +9,16 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.marublosso.worktrack.worktrack_backend.dto.WorkTimeRequestDto;
-import com.marublosso.worktrack.worktrack_backend.entity.AttendanceEntity;
+import com.marublosso.worktrack.worktrack_backend.entity.Attendance;
 import com.marublosso.worktrack.worktrack_backend.repository.mapper.workTimeMapper.WorkTimeRowMapper;
-import com.marublosso.worktrack.worktrack_backend.repository.repo.WorkTimeRepository;
+import com.marublosso.worktrack.worktrack_backend.repository.repo.AttendanceRepository;
 
 @Repository
-public class WorkTimeRepositoryImpl implements WorkTimeRepository {
+public class AttendanceRepositoryImpl implements AttendanceRepository {
 
 	private final JdbcTemplate jdbcTemplate;
 
-	public WorkTimeRepositoryImpl(JdbcTemplate jdbcTemplate) {
+	public AttendanceRepositoryImpl(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 
@@ -78,7 +78,7 @@ public class WorkTimeRepositoryImpl implements WorkTimeRepository {
 	}
 
 	@Override
-	public void updateWorkTime(AttendanceEntity attendanceEntity) {
+	public void updateWorkTime(Attendance attendanceEntity) {
 
 		// 1. SQL문 작성
 		String sql = 
@@ -111,17 +111,18 @@ public class WorkTimeRepositoryImpl implements WorkTimeRepository {
 	}
 
 	@Override
-public void upsertWorkTime(AttendanceEntity attendanceEntity) {
+public void upsertWorkTime(Attendance attendanceEntity) {
 
     String sql =
         "INSERT INTO worktrack_db.ATTENDANCE " +
-        "(user_id, work_date, start_time, end_time, total_hours, overtime, created_at, updated_at, bikou, work_type) " +
-        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+        "(user_id, work_date, start_time, end_time, total_hours, overtime,  yasumi_time , created_at, updated_at, bikou, work_type) " +
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
         "ON DUPLICATE KEY UPDATE " +
         "start_time = VALUES(start_time), " +
         "end_time = VALUES(end_time), " +
         "total_hours = VALUES(total_hours), " +
         "overtime = VALUES(overtime), " +
+		"yasumi_time = VALUES(yasumi_time), " +
         "work_type = VALUES(work_type), " +
         "bikou = VALUES(bikou), " +
         "updated_at = VALUES(updated_at)";
@@ -136,6 +137,7 @@ public void upsertWorkTime(AttendanceEntity attendanceEntity) {
         attendanceEntity.getEnd_time(),
         attendanceEntity.getTotal_hours(),
         attendanceEntity.getOvertime(),
+		attendanceEntity.getYasumi_time(),
         now,   // created_at
         now,   // updated_at
         attendanceEntity.getBikou(),

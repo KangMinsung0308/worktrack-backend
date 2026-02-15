@@ -4,9 +4,9 @@ import java.time.LocalDate;
 import java.util.List;
 
 import com.marublosso.worktrack.worktrack_backend.dto.WorkTimeRequestDto;
-import com.marublosso.worktrack.worktrack_backend.entity.AttendanceEntity;
+import com.marublosso.worktrack.worktrack_backend.entity.Attendance;
 
-public interface WorkTimeRepository {
+public interface AttendanceRepository {
     // CREATE
     void insertWorkTime(WorkTimeRequestDto workTimeRequestDto);
 
@@ -14,9 +14,9 @@ public interface WorkTimeRepository {
     List<WorkTimeRequestDto> findWorkTimeByUserAndDateRange(Long userId, LocalDate firstDay, LocalDate lastDay);
 
     // UPDATE
-    void updateWorkTime(AttendanceEntity attendance);
+    void updateWorkTime(Attendance attendance);
 
     // UPSERT (성공하면 create. update문 삭제하고 대채하기)
-    void upsertWorkTime(AttendanceEntity attendanceEntity);
+    void upsertWorkTime(Attendance attendanceEntity);
 
 }

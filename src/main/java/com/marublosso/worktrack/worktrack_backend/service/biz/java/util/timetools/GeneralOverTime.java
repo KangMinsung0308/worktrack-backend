@@ -2,7 +2,6 @@ package com.marublosso.worktrack.worktrack_backend.service.biz.java.util.timetoo
 
 import java.time.LocalDateTime;
 
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
 
 import com.marublosso.worktrack.worktrack_backend.dto.WorkTimeRequestDto;
@@ -60,8 +59,8 @@ public class GeneralOverTime implements TimeCalculator {
             return 0.0;
         }
 
-        // 총 근무 시간 계산 (분 단위 → 시간)
-        double totalHours = Duration.between(startTime, endTime).toMinutes() / 60.0;
+        // 총 근무 시간 계산 (분 단위)
+        double totalHours = Duration.between(startTime, endTime).toMinutes();
 
         // 휴가시간(YasumiTime) 제외
         if (YasumiTime != null) {
@@ -69,7 +68,7 @@ public class GeneralOverTime implements TimeCalculator {
         }
 
         // 음수 방지 (음수 -> 0.0 반환)
-        return Math.max(totalHours, 0.0);
+        return Math.max(totalHours/60, 0.0);
     }
 
     /******************************************************************
@@ -106,10 +105,10 @@ public class GeneralOverTime implements TimeCalculator {
         if (startTime == null || endTime == null)
             return 0.0;
 
-        double totalHours = Duration.between(startTime, endTime).toMinutes() / 60.0;
+        double totalHours = Duration.between(startTime, endTime).toMinutes();
         double yasumi = YasumiTime != null ? YasumiTime : 0.0;
         totalHours -= yasumi;
 
-        return Math.max(totalHours, 0.0);
+        return Math.max(totalHours/60, 0.0);
     }
 }

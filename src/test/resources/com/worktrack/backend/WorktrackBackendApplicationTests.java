@@ -1,4 +1,4 @@
-package com.marublosso.worktrack.worktrack_backend;
+package com.worktrack.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

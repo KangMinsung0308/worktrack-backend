@@ -1,44 +1,56 @@
 package com.marublosso.worktrack.worktrack_backend.service.biz.java.features;
 
-import com.marublosso.worktrack.worktrack_backend.dto.LoginUserDto;
-import com.marublosso.worktrack.worktrack_backend.entity.User;
-import com.marublosso.worktrack.worktrack_backend.repository.repo.LoginRepository;
+import com.marublosso.worktrack.worktrack_backend.entity.UserAuth;
+import com.marublosso.worktrack.worktrack_backend.entity.UserProfiles;
+import com.marublosso.worktrack.worktrack_backend.repository.repo.UserAuthRepository;
+import com.marublosso.worktrack.worktrack_backend.repository.repo.UserProfilesRepository;
 
 import org.springframework.stereotype.Service;
 
 import com.marublosso.worktrack.worktrack_backend.dto.LoginRequestDto;
+import com.marublosso.worktrack.worktrack_backend.dto.SessionUserProfile;
 
 
 
 @Service
 public class LoginService {
 
-    private final LoginRepository loginRepository;
-    
+    private final UserAuthRepository userAuthRepository;
+    private final UserProfilesRepository userProfilesRepository;
 
-    public LoginService(LoginRepository loginRepository) {
-        this.loginRepository = loginRepository;
+    public LoginService(UserAuthRepository userAuthRepository, UserProfilesRepository userProfilesRepository) {
+        this.userAuthRepository = userAuthRepository;
+        this.userProfilesRepository = userProfilesRepository;
     }
     
-    public LoginUserDto login(LoginRequestDto userRequestDto) {
+    public SessionUserProfile login(LoginRequestDto userRequestDto) {
 
         // TODO : 유효성 검사 
 
         // DTO -> Entity 변환
-        User user = User.builder()
-                .username(userRequestDto.getUsername())
-                .password_hash(userRequestDto.getPassword())
+        UserAuth user = UserAuth.builder()
+                .email(userRequestDto.getUsername())
+                .passwordHash(userRequestDto.getPassword())
                 .build();
 
         // 유저 정보 조회
-        User foundUser = loginRepository.SearchUserInfo(user);
+        UserAuth foundUser = userAuthRepository.searchUserInfo(user);
 
         // 로그인 실패
         if (foundUser == null) {
             return null;
         }
+        SessionUserProfile profilesUserDto = new SessionUserProfile();
+        profilesUserDto.setId(foundUser.getId());
+
+        
+        UserProfiles userProfile = userProfilesRepository.selectUserProfileById(foundUser.getId());
+        profilesUserDto.setName(userProfile.getName());
+        profilesUserDto.setDept(userProfile.getDept());
+
+
         // 로그인 성공
-        return LoginUserDto.from(loginRepository.SearchUserInfo(foundUser));
+        return profilesUserDto;
 
     }
 
