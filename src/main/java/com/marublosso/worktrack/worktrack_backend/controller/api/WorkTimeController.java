@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.marublosso.worktrack.worktrack_backend.dto.LoginUserDto;
 import com.marublosso.worktrack.worktrack_backend.dto.PutWorktimeRequestDto;
 import com.marublosso.worktrack.worktrack_backend.dto.WorkTimeRequestDto;
 import com.marublosso.worktrack.worktrack_backend.service.biz.java.features.GetMonthWorkTimeService;
@@ -45,10 +44,10 @@ public class WorkTimeController {
         // 세션에서 사용자 정보 가져오기
         HttpSession session = sessionRequest.getSession(false);
 
-        LoginUserDto loginUserDto = (LoginUserDto) session.getAttribute("loginUser");
+        Long id = (Long) session.getAttribute("Id");
 
         // 서비스 호출
-        List<WorkTimeRequestDto> results = GetMonthWorkTimeService.getWorkTime(workDate, loginUserDto);
+        List<WorkTimeRequestDto> results = GetMonthWorkTimeService.getWorkTime(workDate, id);
         return ResponseEntity.ok(results);
     }
 
@@ -60,10 +59,10 @@ public class WorkTimeController {
         // 세션에서 사용자 정보 가져오기
         HttpSession session = sessionRequest.getSession(false);
 
-        LoginUserDto loginUserDto = (LoginUserDto) session.getAttribute("loginUser");
+        Long id = (Long) session.getAttribute("Id");
 
         // 근무시간 등록처리
-        putWorkTimeService.UpdateWorkTime(request, loginUserDto);
+        putWorkTimeService.UpdateWorkTime(request, id);
         // 성공
         return ResponseEntity
                 .status(HttpStatus.ACCEPTED).contentType(MediaType.APPLICATION_JSON)

@@ -128,7 +128,7 @@ function hideSuccessModal() {
   modalOverlay.classList.remove("show");
   passwordInput.value = "";
   updateButtonState();
-      window.location.href = URL_LOGIN;
+      window.location.href = URL_UPDATE_PROFILES;
 }
 
 
