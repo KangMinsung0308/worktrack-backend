@@ -46,14 +46,14 @@ public class FrontController {
 
     }
 
-    @GetMapping("/ichiran")
-    public String ichiranPage(HttpServletRequest sessionRequest) {
+    @GetMapping("/dashboard")
+    public String dashboardPage(HttpServletRequest sessionRequest) {
         // 로그인 세션 체크
         LoginUserDto loginUser = (LoginUserDto) sessionRequest.getSession(false).getAttribute("loginUser");
         if (loginUser == null) {
             return "redirect:/login";
         }
-        return "ichiran";
+        return "5_dashboard";
     }
 
     @GetMapping("/createAcount")

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>근무 관리 대시보드</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="/css/common.css" />
+  <link rel="stylesheet" href="/css/5_dashboard.css" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+</head>
+
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <p class="header-today">TODAY</p>
+      <p class="header-separator">|</p>
+      <p class="header-date" id="currentDate">11.20 (목)</p>
+    </div>
+
+    <!-- Settings Icon -->
+    <div class="settings-icon">
+      <svg width="21" height="26" viewBox="0 0 21 26" fill="none">
+        <path
+          d="M14 0C12.5209 0 11.1417 1.17271 10.7113 2.8218L1.16667 2.81897C0.522317 2.81897 0 3.45041 0 4.22845C0 5.00648 0.522317 5.63793 1.16667 5.63793L10.7113 5.63655C11.2341 7.36317 12.5209 8.4569 14 8.4569C15.4791 8.4569 16.7791 7.36036 17.311 5.62529L19.8333 5.63793C20.4777 5.63793 21 5.00648 21 4.22845C21 3.45041 20.4777 2.81897 19.8333 2.81897H17.3011C16.7393 1.10081 15.4791 0 14 0ZM14 2.81897C14.6444 2.81897 15.1667 3.45041 15.1667 4.22845C15.1667 5.00648 14.6444 5.63793 14 5.63793C13.3556 5.63793 12.8333 5.00648 12.8333 4.22845C12.8333 3.45041 13.3556 2.81897 14 2.81897ZM7 8.4569C5.46233 8.4569 4.17527 9.61269 3.70533 11.2787C3.5413 11.2914 1.16667 11.2759 1.16667 11.2759C0.522317 11.2759 0 11.9073 0 12.6853C0 13.4634 0.522317 14.0948 1.16667 14.0948C1.16667 14.0948 3.56113 14.0652 3.71035 14.0836C4.18028 15.7496 5.46233 16.9138 7 16.9138C8.4791 16.9138 9.74657 15.8186 10.301 14.099L19.8333 14.0948C20.4777 14.0948 21 13.4634 21 12.6853C21 11.9073 20.4777 11.2759 19.8333 11.2759L10.2949 11.2632C9.78355 9.5817 8.4791 8.4569 7 8.4569ZM7 11.2759C7.64435 11.2759 8.16667 11.9073 8.16667 12.6853C8.16667 13.4634 7.64435 14.0948 7 14.0948C6.35565 14.0948 5.83333 13.4634 5.83333 12.6853C5.83333 11.9073 6.35565 11.2759 7 11.2759ZM14 16.9138C12.5209 16.9138 11.1679 18.0907 10.7105 19.7187L1.16667 19.7328C0.522317 19.7328 0 20.3642 0 21.1422C0 21.9203 0.522317 22.5517 1.16667 22.5517L10.6932 22.5531C11.1773 24.2233 12.5209 25.3707 14 25.3707C15.4791 25.3707 16.7544 24.2529 17.3163 22.5531L19.8333 22.5517C20.4777 22.5517 21 21.9203 21 21.1422C21 20.3642 20.4777 19.7328 19.8333 19.7328L17.3056 19.7243C16.802 18.0569 15.4791 16.9138 14 16.9138ZM14 19.7328C14.6444 19.7328 15.1667 20.3642 15.1667 21.1422C15.1667 21.9203 14.6444 22.5517 14 22.5517C13.3556 22.5517 12.8333 21.9203 12.8333 21.1422C12.8333 20.3642 13.3556 19.7328 14 19.7328Z"
+          fill="#828282" />
+      </svg>
+    </div>
+
+    <!-- Graph -->
+    <div class="graph-wrapper">
+      <div class="graph-container" id="graphContainer"></div>
+    </div>
+
+    <!-- Table Background -->
+    <div class="table-background">
+      <div class="table-main-bg"></div>
+      <div class="table-header-bg"></div>
+      <div class="table-subheader-bg"></div>
+      <div class="table-header table-header-workday">근무일</div>
+      <div class="table-header table-header-start">출근</div>
+      <div class="table-header table-header-end">퇴근</div>
+      <div class="table-header table-header-total">총 근무 시간</div>
+      <div class="table-header table-header-overtime">잔업 시간</div>
+
+      <!-- Table Rows -->
+      <div class="table-scroll-wrapper">
+        <div class="table-rows" id="tableRows"></div>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+<div class="nav-container">
+          <div class="nav-wrapper">
+            <div class="nav-bg-left"></div>
+            <div class="nav-bg-center"></div>
+            <div class="nav-bg-right"></div>
+
+            <!-- Calendar Icon Button -->
+            <div class="calendar-icon-button active" data-nav="calendar">
+              <svg fill="none" viewBox="0 0 23 24" preserveAspectRatio="none">
+                <path
+                  d="M6.41745 0C5.71333 0 5.14187 0.565895 5.14187 1.26316C2.32156 1.26316 0 3.528 0 6.31579V8.8421L0.0395505 18.9474C0.0395505 21.7339 2.32412 24 5.14187 24H17.8977C20.7154 24 23 21.7377 23 18.9474L22.9604 8.8421V6.31579C22.9604 3.52295 20.7129 1.26316 17.8977 1.26316C17.8977 0.565895 15.3465 0 14.6221 0C13.918 0 13.3465 0.565895 13.3465 1.26316H7.69303C7.69303 0.565895 7.12285 0 6.41745 0ZM5.14187 3.78947C5.14187 4.48674 5.71333 5.05263 6.41745 5.05263C7.12285 5.05263 7.69303 4.48674 7.69303 3.78947H15.3465C15.3465 4.48674 15.918 5.05263 16.6221 5.05263C17.3275 5.05263 17.8977 4.48674 17.8977 3.78947C19.297 3.78947 20.4093 4.91116 20.4093 6.31579V7.57895C17.9551 7.57895 5.00538 7.57895 2.55116 7.57895V6.31579C2.55116 4.93011 3.72343 3.78947 5.14187 3.78947ZM2.55116 10.1053C5.00538 10.1053 17.9551 10.1053 20.4093 10.1053L20.4488 18.9474C20.4488 20.3381 19.3072 21.4737 17.8977 21.4737H5.14187C3.73363 21.4737 2.59071 20.3432 2.59071 18.9474L2.55116 10.1053Z"
+                />
+              </svg>
+            </div>
+
+            <!-- Profile Icon Button -->
+            <div class="profile-icon-button" data-nav="profile">
+              <svg fill="none" viewBox="0 0 27 24" preserveAspectRatio="none">
+                <path
+                  d="M18.225 0C14.8698 0 12.15 2.68667 12.15 6C12.15 9.31333 14.8698 12 18.225 12C21.5802 12 24.3 9.31333 24.3 6C24.3 2.68667 21.5802 0 18.225 0ZM8.1 1.33333C5.11772 1.33333 2.7 3.72133 2.7 6.66667C2.7 9.612 5.11772 12 8.1 12C9.21969 12 10.2803 11.6627 11.1796 11.0413C11.7908 10.62 11.9443 9.77067 11.5171 9.16667C11.09 8.56267 10.272 8.45334 9.66087 8.87467C9.21146 9.18534 8.66187 9.33333 8.1 9.33333C6.60879 9.33333 5.4 8.14 5.4 6.66667C5.4 5.19333 6.60879 4 8.1 4C8.54037 4 8.94321 4.09599 9.32337 4.29199C9.98487 4.63199 10.8356 4.40268 11.1796 3.74935C11.5237 3.09735 11.2505 2.25598 10.5891 1.91732C9.82624 1.52532 8.97669 1.33333 8.1 1.33333ZM18.225 2.66667C20.0889 2.66667 21.6 4.15867 21.6 6C21.6 7.84133 20.0889 9.33333 18.225 9.33333C16.3611 9.33333 14.85 7.84133 14.85 6C14.85 4.15867 16.3611 2.66667 18.225 2.66667ZM4.13438 13.792C1.65834 14.8013 0 17.2747 0 20V22.6667C0 23.4027 0.604395 24 1.35 24H6.75C7.49561 24 8.1 23.4027 8.1 22.6667C8.1 21.9307 7.49561 21.3333 6.75 21.3333H2.7V20C2.7 18.5013 3.60004 17.1254 4.63455 16.52C5.60749 16.9254 6.63674 17.232 7.55204 17.308C8.29508 17.3707 8.96508 16.8173 9.02813 16.0827C9.09117 15.3493 8.55428 14.728 7.81137 14.6654C7.21872 14.616 6.57099 14.44 5.82188 14.1253C5.64098 14.0493 5.53594 13.9893 5.18913 13.8333C4.84906 13.68 4.47971 13.6507 4.13438 13.792ZM13.5844 13.792C11.1083 14.8013 9.45 17.2747 9.45 20V22.6667C9.45 23.4027 10.0544 24 10.8 24H25.65C26.3956 24 27 23.4027 27 22.6667V20C27 17.3387 25.3325 14.9253 22.8656 13.8747C22.5184 13.7267 22.1138 13.7227 21.7688 13.8747C20.5743 14.404 19.4106 14.6667 18.225 14.6667C17.0435 14.6667 15.8757 14.3893 14.6391 13.8333C14.2991 13.68 13.9297 13.6507 13.5844 13.792ZM14.1034 16.52C15.3789 16.9974 16.9167 17.3333 18.225 17.3333C19.523 17.3333 20.9972 17.02 22.2469 16.564C23.4654 17.2493 24.3 18.532 24.3 20V21.3333H12.15V20C12.15 18.4467 13.0355 17.1374 14.1034 16.52Z"
+                />
+              </svg>
+            </div>
+
+            <!-- Main Button (Center Circle) -->
+            <div class="main-button-wrapper active" data-nav="main">
+              <div class="main-button-circle-wrapper">
+                <svg
+                  fill="none"
+                  viewBox="0 0 112 112"
+                  preserveAspectRatio="none"
+                >
+                  <defs>
+                    <filter
+                      id="filter0_d_1_29"
+                      x="0"
+                      y="0"
+                      width="112"
+                      height="112"
+                      filterUnits="userSpaceOnUse"
+                      color-interpolation-filters="sRGB"
+                    >
+                      <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                      <feColorMatrix
+                        in="SourceAlpha"
+                        type="matrix"
+                        values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+                        result="hardAlpha"
+                      />
+                      <feMorphology
+                        radius="1"
+                        operator="dilate"
+                        in="SourceAlpha"
+                        result="effect1_dropShadow_1_29"
+                      />
+                      <feOffset />
+                      <feGaussianBlur stdDeviation="10" />
+                      <feComposite in2="hardAlpha" operator="out" />
+                      <feColorMatrix
+                        type="matrix"
+                        values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+                      />
+                      <feBlend
+                        mode="normal"
+                        in2="BackgroundImageFix"
+                        result="effect1_dropShadow_1_29"
+                      />
+                      <feBlend
+                        mode="normal"
+                        in="SourceGraphic"
+                        in2="effect1_dropShadow_1_29"
+                        result="shape"
+                      />
+                    </filter>
+                  </defs>
+                  <g filter="url(#filter0_d_1_29)">
+                    <circle cx="56" cy="56" r="35" id="mainCircle" />
+                  </g>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Main Icon -->
+            <div class="main-icon-wrapper">
+              <svg fill="none" viewBox="0 0 26 24" preserveAspectRatio="none">
+                <path
+                  d="M11.7 0C8.82817 0 6.5 2.388 6.5 5.33333H5.2C2.32817 5.33333 0 7.72133 0 10.6667V18.6667C0 21.612 2.32817 24 5.2 24H20.8C23.6718 24 26 21.612 26 18.6667V10.6667C26 7.72133 23.6718 5.33333 20.8 5.33333H19.5C19.5 2.388 17.1718 0 14.3 0H11.7ZM11.7 2.66667H14.3C15.736 2.66667 16.9 3.86 16.9 5.33333H9.1C9.1 3.86 10.264 2.66667 11.7 2.66667ZM5.2 8H20.8C22.236 8 23.4 9.19333 23.4 10.6667V11.0413L16.4531 13.416C14.5876 14.0547 11.4124 14.0547 9.54694 13.416L2.6 11.0413V10.6667C2.6 9.19333 3.76402 8 5.2 8ZM2.6 13.8333L8.73444 15.9587C11.1336 16.7787 14.8664 16.7787 17.2656 15.9587L23.4 13.8333V18.6667C23.4 20.14 22.236 21.3333 20.8 21.3333H5.2C3.76402 21.3333 2.6 20.14 2.6 18.6667V13.8333Z"
+                  fill="white"
+                />
+              </svg>
+            </div>
+
+            <!-- Main Label -->
+            <div class="nav-label-main" id="mainLabel">
+              <p>Main</p>
+            </div>
+
+            <!-- Profile Label -->
+            <div class="nav-label-profile" id="profileLabel">
+              <p>Profile</p>
+            </div>
+
+            <!-- Calendar Label -->
+            <div class="nav-label-calendar" id="calendarLabel">
+              <p>Calendar</p>
+            </div>
+          </div>
+        </div>
+    </div>
+  </div>
+  <script src="/js/URL.js"></script>
+  <script src="/js/MESSAGE.js"></script>
+  <script src="/js/common.js"></script>
+  <script src="/js/5_dashboard.js"></script>
+</body>
+
+</html>

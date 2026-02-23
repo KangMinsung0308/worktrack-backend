@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
           break;
 
         case "profile":
-          window.location.href = URL_ICHIRAN;
+          window.location.href = URL_DASH_BOARD;
           break;
 
         case "main":
