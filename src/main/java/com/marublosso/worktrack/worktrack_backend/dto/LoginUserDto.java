@@ -1,6 +1,7 @@
 package com.marublosso.worktrack.worktrack_backend.dto;
 
-import com.marublosso.worktrack.worktrack_backend.entity.user_authEntity;
+import com.marublosso.worktrack.worktrack_backend.entity.auth_profilesJoinEntity;
+
 
 import lombok.Data;
 
@@ -8,12 +9,15 @@ import lombok.Data;
 public class LoginUserDto {
 
     private Long id;
+    private String email;
     private String username;
     private String dept;
-    public static LoginUserDto from(user_authEntity user) {
+    public static LoginUserDto from(auth_profilesJoinEntity user) {
         LoginUserDto dto = new LoginUserDto();
         dto.id = user.getId();
-        dto.username = user.getEmail();
+        dto.email = user.getEmail();
+        dto.username = user.getName();
+        dto.dept = user.getDept();
         return dto;
     }
 

@@ -1,431 +1,14 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>설정</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: #ffffff;
-            width: 100%;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        .screen {
-            display: none;
-            width: 100%;
-            height: 100%;
-            background-color: #ffffff;
-        }
-
-        .screen.active {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .container {
-            max-width: 375px;
-            width: 100%;
-            height: 100%;
-            margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* 헤더 */
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 16px 24px;
-            border-bottom: 1px solid #e6e6e6;
-        }
-
-        .back-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            display: flex;
-            align-items: center;
-        }
-
-        .back-button svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .header-title {
-            font-size: 18px;
-            font-weight: 500;
-            color: #000000;
-        }
-
-        .header-spacer {
-            width: 24px;
-        }
-
-        /* 컨텐츠 영역 */
-        .content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px;
-        }
-
-        /* 프로필 섹션 */
-        .profile-section {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 16px;
-            margin: 16px 24px;
-            background-color: #ffffff;
-            border: 1px solid #e6e6e6;
-            border-radius: 12px;
-            cursor: pointer;
-        }
-
-        .profile-photo {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background-color: #e0e0e0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-
-        .profile-photo svg {
-            width: 32px;
-            height: 32px;
-            color: #666666;
-        }
-
-        .camera-badge {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 24px;
-            height: 24px;
-            background-color: #000000;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid #ffffff;
-        }
-
-        .camera-badge svg {
-            width: 12px;
-            height: 12px;
-            color: #ffffff;
-        }
-
-        .profile-info {
-            flex: 1;
-        }
-
-        .profile-name {
-            font-size: 16px;
-            font-weight: 500;
-            color: #000000;
-            margin-bottom: 4px;
-        }
-
-        .profile-email {
-            font-size: 14px;
-            color: #828282;
-        }
-
-        .chevron-right {
-            width: 20px;
-            height: 20px;
-            color: #828282;
-        }
-
-        /* 설정 아이템 */
-        .settings-list {
-            padding: 0;
-        }
-
-        .setting-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px 24px;
-            border-bottom: 1px solid #f0f0f0;
-            cursor: pointer;
-        }
-
-        .setting-item:hover {
-            background-color: #fafafa;
-        }
-
-        .setting-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .setting-icon {
-            width: 24px;
-            height: 24px;
-            color: #000000;
-        }
-
-        .setting-label {
-            font-size: 16px;
-            color: #000000;
-        }
-
-        /* 토글 스위치 */
-        .toggle-switch {
-            position: relative;
-            display: inline-block;
-            width: 51px;
-            height: 28px;
-            cursor: pointer;
-            border-radius: 14px;
-            transition: background-color 0.2s;
-        }
-
-        .toggle-switch.off {
-            background-color: #999999;
-        }
-
-        .toggle-switch.on {
-            background-color: #000000;
-        }
-
-        .toggle-switch .slider {
-            position: absolute;
-            width: 24px;
-            height: 24px;
-            background-color: #ffffff;
-            border-radius: 50%;
-            top: 2px;
-            transition: transform 0.2s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-
-        .toggle-switch.off .slider {
-            left: 2px;
-        }
-
-        .toggle-switch.on .slider {
-            left: 25px;
-            border: 2px solid #000000;
-        }
-
-        /* 로그아웃 버튼 */
-        .logout-section {
-            padding: 0 24px 24px;
-        }
-
-        .logout-button {
-            width: 100%;
-            height: 50px;
-            background-color: #FFFFFF;
-            color: #FF3E3E;
-            border: 1px solid #e6e6e6;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .logout-button:hover {
-            background-color: #F8F8F8;
-        }
-
-        .logout-button svg {
-            width: 20px;
-            height: 20px;
-            stroke: #FF3E3E;
-        }
-
-        /* 버전 정보 */
-        .version-info {
-            padding: 16px 24px;
-            text-align: center;
-            color: #999999;
-            font-size: 14px;
-            border-top: 1px solid #f0f0f0;
-        }
-
-        /* 입력 필드 */
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-label {
-            display: block;
-            font-size: 14px;
-            color: #666666;
-            margin-bottom: 8px;
-        }
-
-        .input-field {
-            width: 100%;
-            height: 48px;
-            padding: 0 16px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 16px;
-            color: #000000;
-        }
-
-        .input-field:disabled {
-            background-color: #f5f5f5;
-            color: #828282;
-        }
-
-        /* 저장 버튼 */
-        .save-button {
-            width: 100%;
-            height: 50px;
-            background-color: #000000;
-            color: #ffffff;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            margin-top: auto;
-        }
-
-        .save-button:hover {
-            background-color: #333333;
-        }
-
-        /* 언어 설정 */
-        .language-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 20px 24px;
-            border-bottom: 1px solid #f0f0f0;
-            cursor: pointer;
-        }
-
-        .language-item:hover {
-            background-color: #fafafa;
-        }
-
-        .language-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .language-name {
-            font-size: 16px;
-            color: #000000;
-            margin-bottom: 4px;
-        }
-
-        .language-native {
-            font-size: 14px;
-            color: #828282;
-        }
-
-        .check-icon {
-            width: 24px;
-            height: 24px;
-            color: #000000;
-        }
-
-        /* 계정 카드 */
-        .account-card {
-            background-color: #ffffff;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 16px;
-        }
-
-        .account-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .account-logo {
-            width: 24px;
-            height: 24px;
-        }
-
-        .account-info {
-            flex: 1;
-        }
-
-        .account-name {
-            font-size: 16px;
-            font-weight: 500;
-            color: #000000;
-        }
-
-        .account-email {
-            font-size: 14px;
-            color: #828282;
-            margin-top: 4px;
-        }
-
-        .account-button {
-            width: 100%;
-            height: 44px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-
-        .account-button.connect {
-            background-color: #000000;
-            color: #ffffff;
-            border: none;
-        }
-
-        .account-button.connect:hover {
-            background-color: #333333;
-        }
-
-        .account-button.disconnect {
-            background-color: #ffffff;
-            color: #ff3b30;
-            border: 1px solid #ff3b30;
-        }
-
-        .account-button.disconnect:hover {
-            background-color: #fff5f5;
-        }
-
-        .description {
-            font-size: 14px;
-            color: #828282;
-            line-height: 1.5;
-            margin-bottom: 24px;
-        }
-
-        .footer-padding {
-            height: 24px;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/css/6_setting.css" />
 </head>
+
 <body>
     <!-- 설정 메인 화면 -->
     <div id="settings-screen" class="screen active">
@@ -449,14 +32,16 @@
                     </svg>
                     <div class="camera-badge">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
+                            </path>
                             <circle cx="12" cy="13" r="4"></circle>
                         </svg>
                     </div>
                 </div>
                 <div class="profile-info">
-                    <div class="profile-name">사용자 이름</div>
-                    <div class="profile-email">user@example.com</div>
+                    <div class="profile-name" th:text="${userName}"></div>
+                    <div class="profile-email" th:text="${email}"></div>
+                    
                 </div>
                 <svg class="chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <polyline points="9 18 15 12 9 6"></polyline>
@@ -467,7 +52,8 @@
                 <div class="settings-list">
                     <div class="setting-item">
                         <div class="setting-left">
-                            <svg class="setting-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg class="setting-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                                 <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                             </svg>
@@ -480,21 +66,25 @@
 
                     <div class="setting-item" onclick="showLanguage()">
                         <div class="setting-left">
-                            <svg class="setting-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg class="setting-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <line x1="2" y1="12" x2="22" y2="12"></line>
-                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                                <path
+                                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                                </path>
                             </svg>
                             <span class="setting-label">언어</span>
                         </div>
-                        <svg class="chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <svg class="chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
                             <polyline points="9 18 15 12 9 6"></polyline>
                         </svg>
                     </div>
                 </div>
             </div>
 
-            <div class="version-info">버전 10.0</div>
+            <div class="version-info">버전 1.0</div>
             <div class="logout-section">
                 <button class="logout-button" onclick="logout()">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -525,13 +115,16 @@
             <div class="content" style="flex: 1;">
                 <div class="profile-section" style="border: none; padding: 0; margin-bottom: 32px; cursor: default;">
                     <div class="profile-photo" style="width: 80px; height: 80px;">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 40px; height: 40px;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            style="width: 40px; height: 40px;">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
                         <div class="camera-badge">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                <path
+                                    d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
+                                </path>
                                 <circle cx="12" cy="13" r="4"></circle>
                             </svg>
                         </div>
@@ -584,7 +177,8 @@
                         <div class="language-name">한국어</div>
                         <div class="language-native">Korean</div>
                     </div>
-                    <svg class="check-icon language-check" id="check-ko" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg class="check-icon language-check" id="check-ko" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
                         <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                 </div>
@@ -594,7 +188,8 @@
                         <div class="language-name">영어</div>
                         <div class="language-native">English</div>
                     </div>
-                    <svg class="check-icon language-check" id="check-en" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                    <svg class="check-icon language-check" id="check-en" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" style="display: none;">
                         <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                 </div>
@@ -604,7 +199,8 @@
                         <div class="language-name">일본어</div>
                         <div class="language-native">Japanese</div>
                     </div>
-                    <svg class="check-icon language-check" id="check-ja" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                    <svg class="check-icon language-check" id="check-ja" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" style="display: none;">
                         <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                 </div>
@@ -632,10 +228,18 @@
                 <div class="account-card">
                     <div class="account-header">
                         <svg class="account-logo" viewBox="0 0 24 24" fill="none">
-                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                            <path
+                                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                                fill="#4285F4" />
+                            <path
+                                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                                fill="#34A853" />
+                            <path
+                                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                                fill="#FBBC05" />
+                            <path
+                                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                                fill="#EA4335" />
                         </svg>
                         <div class="account-info">
                             <div class="account-name">Google</div>
@@ -648,7 +252,9 @@
                 <div class="account-card">
                     <div class="account-header">
                         <svg class="account-logo" viewBox="0 0 24 24" fill="none">
-                            <path d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.53 4.08zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z" fill="#000000"/>
+                            <path
+                                d="M17.05 20.28c-.98.95-2.05.88-3.08.4-1.09-.5-2.08-.48-3.24 0-1.44.62-2.2.44-3.06-.4C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.53 4.08zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"
+                                fill="#000000" />
                         </svg>
                         <div class="account-info">
                             <div class="account-name">Apple</div>
@@ -660,120 +266,11 @@
             </div>
         </div>
     </div>
+    <script src="/js/URL.js"></script>
+    <script src="/js/MESSAGE.js"></script>
+    <script src="/js/common.js"></script>
+    <script src="/js/6_setting.js"></script>
 
-    <script>
-        // 화면 전환 함수
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.remove('active');
-            });
-            document.getElementById(screenId).classList.add('active');
-        }
-
-        function showSettings() {
-            showScreen('settings-screen');
-        }
-
-        function showProfile() {
-            showScreen('profile-screen');
-        }
-
-        function showLanguage() {
-            showScreen('language-screen');
-        }
-
-        function showConnectedAccounts() {
-            showScreen('accounts-screen');
-        }
-
-        // 알림 토글
-        function toggleNotification() {
-            const toggle = document.getElementById('notification-toggle');
-            if (toggle.classList.contains('on')) {
-                toggle.classList.remove('on');
-                toggle.classList.add('off');
-            } else {
-                toggle.classList.remove('off');
-                toggle.classList.add('on');
-            }
-        }
-
-        // 언어 선택
-        let selectedLanguage = 'ko';
-        function selectLanguage(lang) {
-            selectedLanguage = lang;
-            document.querySelectorAll('.language-check').forEach(check => {
-                check.style.display = 'none';
-            });
-            document.getElementById('check-' + lang).style.display = 'block';
-        }
-
-        // 프로필 저장
-        function saveProfile() {
-            const userName = document.getElementById('user-name').value;
-            alert('프로필이 저장되었습니다.');
-        }
-
-        // 로그아웃
-        function logout() {
-            if (confirm('로그아웃 하시겠습니까?')) {
-                alert('로그아웃 되었습니다.');
-            }
-        }
-
-        // Google 계정 토글
-        let googleConnected = true;
-        function toggleGoogle() {
-            const button = document.getElementById('google-button');
-            const email = document.getElementById('google-email');
-            
-            if (googleConnected) {
-                button.classList.remove('disconnect');
-                button.classList.add('connect');
-                button.textContent = '연결하기';
-                email.style.display = 'none';
-            } else {
-                button.classList.remove('connect');
-                button.classList.add('disconnect');
-                button.textContent = '연결 해제';
-                email.style.display = 'block';
-                email.textContent = 'user@gmail.com';
-            }
-            googleConnected = !googleConnected;
-        }
-
-        // Apple 계정 토글
-        let appleConnected = false;
-        function toggleApple() {
-            const button = document.getElementById('apple-button');
-            const email = document.getElementById('apple-email');
-            
-            if (appleConnected) {
-                button.classList.remove('disconnect');
-                button.classList.add('connect');
-                button.textContent = '연결하기';
-                email.style.display = 'none';
-            } else {
-                button.classList.remove('connect');
-                button.classList.add('disconnect');
-                button.textContent = '연결 해제';
-                email.style.display = 'block';
-                email.textContent = 'user@icloud.com';
-            }
-            appleConnected = !appleConnected;
-        }
-
-        // 뒤로 가기 버튼
-        function goBack() {
-            const currentScreen = document.querySelector('.screen.active');
-            if (currentScreen.id === 'profile-screen') {
-                showSettings();
-            } else if (currentScreen.id === 'language-screen') {
-                showSettings();
-            } else if (currentScreen.id === 'accounts-screen') {
-                showProfile();
-            }
-        }
-    </script>
 </body>
+
 </html>

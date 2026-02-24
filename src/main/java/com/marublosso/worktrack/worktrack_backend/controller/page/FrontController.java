@@ -56,6 +56,20 @@ public class FrontController {
         return "5_dashboard";
     }
 
+    @GetMapping("/settings")
+    public String settingsPage(HttpServletRequest sessionRequest, Model model) {
+        // 로그인 세션 체크
+        LoginUserDto loginUser = (LoginUserDto) sessionRequest.getSession(false).getAttribute("loginUser");
+        if (loginUser == null) {
+            return "redirect:/login";
+        }
+
+        // 유저 정보를 모델에 추가(메인화면 이름, 현장표시)
+        model.addAttribute("email", loginUser.getEmail());
+        model.addAttribute("userName", loginUser.getUsername());
+        return "6_setting";
+    }
+
     @GetMapping("/createAcount")
     public String signUpPage(HttpServletRequest sessionRequest) {
 

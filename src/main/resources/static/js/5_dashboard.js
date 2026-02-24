@@ -5,6 +5,7 @@ let currentMonthData = [];
 function funcWorkDate() {
   const now = new Date();
   const workDate = now.toISOString().substring(0, 10);
+  const settingsIcon = document.getElementById("settingsIcon");
 
   fetch(`${API_URL_GET_WORKTIME}/${workDate}`)
     .then((res) => {
@@ -40,8 +41,8 @@ function filterCurrentMonthData(data) {
   // 🔥 날짜 포맷 수정 (YYYY-MM)
   const currentMonthKey = `${year}-${String(month).padStart(2, "0")}`;
 
-  return data.filter((work) =>
-    work.workDate && work.workDate.startsWith(currentMonthKey)
+  return data.filter(
+    (work) => work.workDate && work.workDate.startsWith(currentMonthKey),
   );
 }
 
@@ -224,6 +225,14 @@ function updateCurrentDate() {
 
   dateElement.textContent = `${month}.${day} (${weekday})`;
 }
+
+    //  
+    settingsIcon.addEventListener("click", () => {
+        window.location.href = URL_SETTINGS;
+    });
+
+
+
 
 // 초기 실행
 updateCurrentDate();

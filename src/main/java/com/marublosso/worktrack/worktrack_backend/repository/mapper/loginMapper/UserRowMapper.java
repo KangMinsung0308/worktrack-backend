@@ -3,16 +3,18 @@ package com.marublosso.worktrack.worktrack_backend.repository.mapper.loginMapper
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import org.springframework.jdbc.core.RowMapper;
-import com.marublosso.worktrack.worktrack_backend.entity.user_authEntity;
 
-    public class UserRowMapper implements RowMapper<user_authEntity> {
+import com.marublosso.worktrack.worktrack_backend.entity.auth_profilesJoinEntity;
+
+    public class UserRowMapper implements RowMapper<auth_profilesJoinEntity> {
 
         @Override
-        public user_authEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
-            return user_authEntity.builder()
+        public auth_profilesJoinEntity mapRow(ResultSet rs, int rowNum) throws SQLException {
+            return auth_profilesJoinEntity.builder()
                     .id(rs.getLong("id"))
                     .email(rs.getString("email"))
-                    .password_hash(rs.getString("password_hash"))
+                    .name(rs.getString("name"))
+                    .dept(rs.getString("dept"))
                     .build();
         }
     }

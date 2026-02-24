@@ -1,9 +1,13 @@
 package com.marublosso.worktrack.worktrack_backend.repository.impl;
 
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+
+import com.marublosso.worktrack.worktrack_backend.entity.auth_profilesJoinEntity;
 import com.marublosso.worktrack.worktrack_backend.entity.user_authEntity;
+import com.marublosso.worktrack.worktrack_backend.entity.user_profilesEntity;
 import com.marublosso.worktrack.worktrack_backend.repository.mapper.loginMapper.UserRowMapper;
 import com.marublosso.worktrack.worktrack_backend.repository.repo.LoginRepository;
 
@@ -17,11 +21,17 @@ public class LoginRepositorylmpl implements LoginRepository {
     }
 
     @Override
-    public user_authEntity SearchUserInfo(user_authEntity user) {
+    public auth_profilesJoinEntity SearchUserInfo(user_authEntity user) {
 
-        String sql = " SELECT id , email , password_hash " +
-                " from worktrack_db.user_auth " +
-                " Where email = ? and password_hash  = ? ";
+        String sql = " SELECT ua.id, " +
+                " ua.email, " +
+                " up.name, " +
+                " up.dept" +
+                " FROM worktrack_db.user_auth ua" +
+                " INNER JOIN worktrack_db.user_profiles up" +
+                "     ON ua.id = up.id" +
+                " WHERE ua.email = ?" +
+                " AND ua.password_hash = ?";
         Object[] params = new Object[] { user.getEmail(), user.getPassword_hash() };
 
         try {
@@ -56,9 +66,7 @@ public class LoginRepositorylmpl implements LoginRepository {
 
         jdbcTemplate.update(sql,
                 user.getEmail(),
-                user.getPassword_hash()
-        );
+                user.getPassword_hash());
 
     }
-
 }
