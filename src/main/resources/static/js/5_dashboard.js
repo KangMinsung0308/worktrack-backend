@@ -226,13 +226,10 @@ function updateCurrentDate() {
   dateElement.textContent = `${month}.${day} (${weekday})`;
 }
 
-    //  
-    settingsIcon.addEventListener("click", () => {
-        window.location.href = URL_SETTINGS;
-    });
-
-
-
+//
+settingsIcon.addEventListener("click", () => {
+  window.location.href = URL_SETTINGS;
+});
 
 // 초기 실행
 updateCurrentDate();

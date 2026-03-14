@@ -401,7 +401,7 @@ function handleSave() {
     workDate: key,
     startTime: startTimeValue ? `${key}T${startTimeValue}:00` : null,
     endTime: endTimeValue ? `${key}T${endTimeValue}:00` : null,
-    YasumiTime: document.getElementById("breakTime").value,
+    yasumiTime: document.getElementById("breakTime").value,
     bikou: document.getElementById("memo").value,
     workType: document.getElementById("vacationType").value || 0,
   };

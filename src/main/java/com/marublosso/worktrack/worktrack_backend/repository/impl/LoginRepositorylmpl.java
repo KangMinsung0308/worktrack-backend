@@ -1,13 +1,11 @@
 package com.marublosso.worktrack.worktrack_backend.repository.impl;
 
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.marublosso.worktrack.worktrack_backend.entity.auth_profilesJoinEntity;
 import com.marublosso.worktrack.worktrack_backend.entity.user_authEntity;
-import com.marublosso.worktrack.worktrack_backend.entity.user_profilesEntity;
 import com.marublosso.worktrack.worktrack_backend.repository.mapper.loginMapper.UserRowMapper;
 import com.marublosso.worktrack.worktrack_backend.repository.repo.LoginRepository;
 

@@ -150,10 +150,6 @@ body {
   color: #828282;
 }
 
-/* 설정 아이템 */
-.settings-list {
-  padding: 0;
-}
 
 .setting-item {
   display: flex;
