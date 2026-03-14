@@ -34,6 +34,11 @@ function toggleNotification() {
   }
 }
 
+// 근무시간 설정
+function showWorkHours() {
+  window.location.href = URL_STANDARD_TIME;
+}
+
 // 언어 선택
 let selectedLanguage = "ko";
 function selectLanguage(lang) {
@@ -53,21 +58,46 @@ function saveProfile() {
 // 로그아웃
 function logout() {
   if (confirm("로그아웃 하시겠습니까?")) {
-      fetch(`${API_URL_LOGOUT}`, { method: "POST" })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.success) {
-        window.location.href = URL_LOGIN;
-      } else {
-        console.log("로그아웃 실패");
-      }
-    })
-    .catch((err) => console.error("요청 오류:", err));
+    fetch(`${API_URL_LOGOUT}`, { method: "POST" })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          window.location.href = URL_LOGIN;
+        } else {
+          console.log("로그아웃 실패");
+        }
+      })
+      .catch((err) => console.error("요청 오류:", err));
     alert("로그아웃 되었습니다.");
   }
 }
 
-// Google 계정 토글
+// 프로필 업데이트
+function updateProfile() {
+  const userName = document.getElementById("user-name").value;
+  const dept = document.getElementById("user-dept").value;
+
+  const payload = {
+    name: userName,
+    dept: dept,
+  };
+
+  fetch(API_URL_UPDATE_PROFILE, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  }).then(async (response) => {
+    const data = await response.json(); // ⭐ JSON 파싱
+
+    if (!response.ok) {
+      // 서버에서 내려준 실패 메시지
+      throw new Error(data.message);
+    }
+    return saveProfile();
+  });
+}
+
+// Google 계정 토글 (미구현)
 let googleConnected = true;
 function toggleGoogle() {
   const button = document.getElementById("google-button");
@@ -88,7 +118,7 @@ function toggleGoogle() {
   googleConnected = !googleConnected;
 }
 
-// Apple 계정 토글
+// Apple 계정 토글 (미구현)
 let appleConnected = false;
 function toggleApple() {
   const button = document.getElementById("apple-button");

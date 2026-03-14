@@ -65,7 +65,7 @@ public class GeneralOverTime implements TimeCalculator {
 
         // 휴가시간(YasumiTime) 제외
         if (YasumiTime != null) {
-            totalHours -= YasumiTime;
+            totalHours -= YasumiTime / 60;
         }
 
         // 음수 방지 (음수 -> 0.0 반환)

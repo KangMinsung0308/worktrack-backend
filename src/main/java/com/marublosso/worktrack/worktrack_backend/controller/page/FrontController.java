@@ -67,7 +67,20 @@ public class FrontController {
         // 유저 정보를 모델에 추가(메인화면 이름, 현장표시)
         model.addAttribute("email", loginUser.getEmail());
         model.addAttribute("userName", loginUser.getUsername());
+        model.addAttribute("dept", loginUser.getDept());
+        
         return "6_setting";
+    }
+
+    @GetMapping("/standardTime")
+    public String standardTimePage(HttpServletRequest sessionRequest, Model model) {
+        // 로그인 세션 체크
+        LoginUserDto loginUser = (LoginUserDto) sessionRequest.getSession(false).getAttribute("loginUser");
+        if (loginUser == null) {
+            return "redirect:/login";
+        }
+
+        return "1_3StandardTime";
     }
 
     @GetMapping("/createAcount")
